@@ -1,0 +1,56 @@
+/* Estilos para la card */
+.kaze-glass-card {
+    /* width: 300px; */
+    padding: 1rem;
+    padding-top: 2.5rem;
+
+    border-radius: 20px;
+    /* Sombra suave */
+    background-color: rgba(255, 255, 255, 0.3);
+    /* Fondo translúcido */
+    backdrop-filter: blur(5px);
+    /* Efecto de desenfoque para mayor sensación de translucidez */
+    
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    
+}
+
+/* Estilos adicionales (opcional) para el contenido dentro de la card */
+.kaze-glass-card h2 {
+    color: #333;
+}
+
+.kaze-glass-card p {
+    color: #666;
+}
+
+.kaze-card-container {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+    height: auto; /* Altura inicial */
+    transition: height 0.3s ease-out; /* Ajusta la transición a height */
+
+}
+
+.kaze-collapsed-card {
+    height: 0; /* Altura a cero cuando se colapsa */
+    overflow: hidden;
+    transition: height 0.3s ease-out; /* Ajusta la transición a height */
+
+}
+
+.kaze-glass-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+    z-index: -1;
+
+    /* Para asegurarse de que esté detrás de la card */
+}

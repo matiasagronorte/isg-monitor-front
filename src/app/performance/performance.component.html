@@ -1,0 +1,84 @@
+<div class="">
+
+    <app-navbar [isNavCollapsed]="collapsedNav" (collapseChange)="updateCollapse($event)" />
+    <div [ngClass]="'container-fluid p-5 app-content'+ (collapsedNav ? ' w-100 mx-0' : '')">
+        <h1><b>Indicadores</b></h1>
+        <br>
+
+        <div class="card my-3 p-3" style="background-color: #f9f9f9; border-color: #ffffff;">
+            <h3>
+                Descarga de informes de desempeño
+            </h3>
+            <br>
+            <form (keydown.enter)="$event.preventDefault()" [formGroup]="formInformes"
+                (ngSubmit)="onSubmitFormInformes($event)">
+                <div class="row">
+                    
+                    <div class="col-lg-4">
+                        <div class="kaze-form-control active">
+                            <select name="" id=""  formControlName="idusuario_csc" >
+                                <option value="">Todos</option>
+                                <ng-container *ngFor="let item of vendedoresOptions">
+                                    <option [value]="item.value">
+                                        {{ item.text }}
+                                    </option>
+                                </ng-container>
+                            </select>
+                            <label for="">
+                                Seleccionar operador
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <app-kaze-form-input label="Fecha desde" type="date" [focusedParam]="true" formControlName="fechadesde" />
+                    </div>
+                    <div class="col-lg-4">
+                        <app-kaze-form-input label="Fecha hasta" type="date" [focusedParam]="true" formControlName="fechahasta"/>
+                    </div>
+                </div>
+            </form>
+            
+            <button class="kaze-btn kaze-btn-success mt-3" style="width: 10rem;" (click)="descargarInforme()">
+                <div *ngIf="cargandoInforme" class="spinner-border">
+                    
+                </div>
+                <div *ngIf="!cargandoInforme">
+                    Descargar
+                </div>
+            </button>
+            <hr>
+            
+        </div>
+
+    </div>
+</div>
+
+<app-modal [showModal]="mostrarModalElegirAgente" (modalChange)="modalElegirAgenteChange($event)"
+    title="Seleccionar agente">
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let item of resultados_usuarios_csc;index as i">
+                    <tr style="cursor: pointer;" *ngIf="item.supervisor == 0 && item.admin == 0"
+                        (click)="agregarAgente(i)">
+                        <td>
+                            {{ item.nombre }}
+                        </td>
+                        <td>
+                            {{ item.email }}
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </div>
+
+</app-modal>
+

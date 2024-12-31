@@ -1,0 +1,51 @@
+<div class="">
+
+    <app-navbar [isNavCollapsed]="collapsedNav" (collapseChange)="updateCollapse($event)" />
+    <div [ngClass]="'container-fluid p-5 app-content'+ (collapsedNav ? ' w-100 mx-0' : '')">
+        <h1><b>Datos de mi cuenta</b></h1>
+        <br>
+        
+        
+        <div class="row">
+            
+            <div class="col-lg-5">
+                
+                <div class="card my-3 p-3" style="background-color: #f9f9f9; border-color: #ffffff;">
+    
+                    <div *ngIf="!enviando_nueva_pass">
+                        <h5>
+                            Actualizar contraseña
+                        </h5>
+                        <form (keydown.enter)="$event.preventDefault()" [formGroup]="form_recuperapass" (ngSubmit)="verificarActualizarPass()">
+                            <div class="row pt-3">
+                                <div class="col-lg-6 mb-4">
+                                    <app-kaze-form-input type="password" label="Contraseña actual" name="pass_actual" formControlName="pass_actual"/>
+                                </div>
+                                <div class="col-lg-6 mb-4">
+                                    <app-kaze-form-input type="password" label="Contraseña nueva" name="nueva_pass" formControlName="nueva_pass"/>
+                                </div>
+                                <div class="col-lg-6 mb-4">
+                                    <app-kaze-form-input type="password" label="Repetir contraseña nueva" name="repetir_nueva_pass" formControlName="repetir_nueva_pass" />        
+                                </div>
+                                <input type="hidden" formControlName="id" name="id">
+                                <div class="col-lg-6 mb-4">
+                                    <button class="kaze-btn kaze-btn-success w-100" >
+                                        Actualizar
+                                    </button>
+                                </div>
+                            </div>
+
+                        </form>
+                        
+                    </div>
+                    <div *ngIf="enviando_nueva_pass">
+                        <div class="kaze-loader">
+        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

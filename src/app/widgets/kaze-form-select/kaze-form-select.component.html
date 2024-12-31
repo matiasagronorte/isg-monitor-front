@@ -1,0 +1,12 @@
+<div class="kaze-form-control" [ngClass]="{'active': focusedParam || value}">
+    <select [id]="formid + '-' + name" [(ngModel)]="value" (focus)="handleFocus()" (blur)="handleBlur()" (input)="onInput(value)">
+        <option value=""> {{ firstoption }} </option>
+        <option [value]="item.value" *ngFor="let item of options; trackBy:identify">
+            {{ item.text }}
+        </option>
+    </select>
+    <label>{{ label }}</label>
+    <div *ngIf="detail" style="width: 100%; text-align: right;">
+        <small style="color: grey">{{ detail }}</small>
+    </div>
+</div>

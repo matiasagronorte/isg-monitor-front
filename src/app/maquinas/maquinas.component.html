@@ -1,0 +1,139 @@
+<div class="">
+
+    <app-navbar [isNavCollapsed]="collapsedNav" (collapseChange)="updateCollapse($event)" />
+    <div [ngClass]="'container-fluid p-5 app-content'+ (collapsedNav ? ' w-100 mx-0' : '')">
+        <h1><b>Gestión de maquinarias</b></h1>
+        <br>
+
+        <div class="row">
+
+            <div class="card my-3 p-3" style="background-color: #f9f9f9; border-color: #ffffff;">
+
+                <form (keydown.enter)="$event.preventDefault()" [formGroup]="formMaquinas" class="d-none">
+                    <div class="row pt-3">
+                        <div class="col-lg-4 mb-4">
+                            <app-kaze-form-input label="ID Op.Center" formControlName="id" [readonly]="true" />
+                        </div>
+
+                        <div class="col-lg-4 mb-4">
+                            <app-kaze-form-input label="Linea negocio" formControlName="lineanegocio" />
+                        </div>
+
+                        <div class="col-lg-4 mb-4">
+                            <app-kaze-form-input label="Organización" formControlName="nombre_organizacion" />
+                            <input type="hidden" name="" formControlName="idorganizacion">
+                        </div>
+
+                        <div class="col-lg-4 mb-4">
+                            <app-kaze-form-input label="Marca" formControlName="marca" />
+                        </div>
+
+                        <div class="col-lg-4 mb-4">
+                            <app-kaze-form-input label="Modelo" formControlName="modelo" />
+                        </div>
+
+                        <div class="col-lg-4 mb-4">
+                            <app-kaze-form-input label="Link Manual Diagnóstico"
+                                formControlName="link_manual_diagnostico" />
+                        </div>
+                        <div class="col-lg-4 mb-4">
+                            <app-kaze-form-input label="Link Manual Reparación"
+                                formControlName="link_manual_reparacion" />
+                        </div>
+                        <div class="col-lg-4 mb-4">
+                            <app-kaze-form-input label="Link Manual Operador" formControlName="link_manual_operador" />
+                        </div>
+
+                    </div>
+                </form>
+                <h5>
+                    Mapa de códigos de falla
+                </h5>
+                <form (keydown.enter)="$event.preventDefault()" [formGroup]="formMapaCodigosModelos">
+
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <br>
+                            <div class="ng-autocomplete" style="width: 100%;">
+
+                                <ng-autocomplete [data]="dataCodigosFalla" searchKeyword="codigo"
+                                    placeholder="Ingresar código de falla" (selected)='selectCodigoFallaEvent($event)'
+                                    (inputChanged)='onCodigoFallaChangeSearch($event)'
+                                    (inputFocused)='onCodigoFallaFocused($event)' [itemTemplate]="itemTemplateCodigo"
+                                    [notFoundTemplate]="notFoundTemplateCodigo">
+                                </ng-autocomplete>
+
+                                <ng-template #itemTemplateCodigo let-item>
+                                    <a [innerHTML]="item.codigo"></a>
+                                </ng-template>
+
+                                <ng-template #notFoundTemplateCodigo let-notFound>
+                                    <div [innerHTML]="'Sin resultados'"></div>
+                                </ng-template>
+
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <br>
+                            <div class="ng-autocomplete" style="width: 100%;">
+                                <ng-autocomplete [data]="dataModelos" searchKeyword="nombremodelo"
+                                    placeholder="Ingresar modelo de maquinaria" (selected)='selectModeloEvent($event)'
+                                    (inputChanged)='onModeloChangeSearch($event)'
+                                    (inputFocused)='onModeloFocused($event)' [itemTemplate]="itemTemplate1"
+                                    [notFoundTemplate]="notFoundTemplate1">
+                                </ng-autocomplete>
+                                <ng-template #itemTemplate1 let-item>
+                                    <a [innerHTML]="item.tipomaquina+'. '+item.nombremodelo"></a>
+                                </ng-template>
+                                <ng-template #notFoundTemplate1 let-notFound>
+                                    <div [innerHTML]="'Sin resultados'"></div>
+                                </ng-template>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <br>
+                            <app-kaze-form-input label="Porcentaje de filtro" type="number"
+                                formControlName="porcentaje_filtro_acciones" />
+                        </div>
+
+                        <div class="col-lg-6">
+                            <br>
+                            <app-kaze-form-input label="Link a manual Serv.Adv" type="text"
+                                formControlName="link_manual" />
+                        </div>
+
+                        <div class="col-lg-6">
+                            <br>
+                            <app-kaze-form-input label="Archivo instrucciones" type="file"
+                                formControlName="archivo" [focusedParam]="true" (change)="onFileChanged($event, 'archivoinstructivo',0)"/>
+                        </div>
+
+                    </div>
+                </form>
+
+                <!-- <hr> -->
+                <br>
+                <p>
+                    Editar datos de código de falla relacionados a modelo de máquina
+                </p>
+                <br>
+                
+                <div style="display: flex; flex-direction: row;">
+                    <div class="px-2 d-inline">
+                        <button class="kaze-btn kaze-btn-success" style="width: 15rem;" (click)="guardarMapaCodigosModelos()">
+                            Guardar cambios
+                        </button>
+                    </div>
+                    
+                    <div class="px-2 d-inline">
+                        <button class="kaze-btn kaze-btn-info" style="width: 15rem;" (click)="limpiarFormularioMapaCodigosModelos()">
+                            Limpiar
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

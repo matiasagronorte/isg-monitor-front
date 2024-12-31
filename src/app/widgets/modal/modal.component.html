@@ -1,0 +1,16 @@
+<div (click)="cerrarModal($event)" [class]="'modal ' + (showModal ? 'show' : '')" tabindex="-1" role="dialog" [style]="'display: '+ (showModal ? 'block' : 'none') +';'" style="background-color: rgba(0,0,0,0.8);" >
+  <div  class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"> {{title}} </h5>
+        
+      </div>
+      <div class="modal-body">
+          <ng-content></ng-content>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="kaze-btn kaze-btn-danger" (click)="cerrarModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>

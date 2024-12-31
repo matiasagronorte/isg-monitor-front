@@ -1,0 +1,228 @@
+<div class="">
+
+    <app-navbar [isNavCollapsed]="collapsedNav" (collapseChange)="updateCollapse($event)" />
+    <div [ngClass]="'container-fluid p-5 app-content'+ (collapsedNav ? ' w-100 mx-0' : '')">
+        <h1><b>Gestión de servicios</b></h1>
+        <br>
+        <form (keydown.enter)="$event.preventDefault()" [formGroup]="formResponsables"
+        (ngSubmit)="onSubmitFormResponsables($event)">
+            <div class="card my-3 p-3" style="background-color: #f9f9f9; border-color: #ffffff;">
+                <h3>
+                    Responsables
+                </h3>
+                <div class="row">
+                    <div class="col-lg-3 mb-4">
+                        <app-kaze-form-input label="Num. Interno" [readonly]="true" type="number" formControlName="id"/>
+                    </div>
+                    <div class="col-lg-3 mb-4">
+                        <app-kaze-form-input label="Nombre" formControlName="nombre"/>
+                    </div>
+                    
+                    <div class="col-lg-3 mb-4">
+                        <app-kaze-form-input label="Email" type="email" formControlName="email"/>
+                    </div>
+                    
+                    <div class="col-lg-3 mb-4">
+                        <app-kaze-form-input label="WhatsApp" type="number" formControlName="whatsapp"/>
+                    </div>
+                    
+                    <div class="col-lg-3 mb-4">
+                        <app-kaze-form-input label="Descripción de puesto" type="text" formControlName="descripcion_puesto"/>
+                    </div>
+                    
+
+                    <div class="col-lg-3 mb-4">
+                        <div class="kaze-form-control active">
+                            <select name="" id="" formControlName="idsucursal">
+                                <option value="">Seleccionar sucursal</option>
+                                <ng-container *ngFor="let item of options_sucursales">
+                                    <option [value]="item.id">{{item.id+". "+ item.nombre }} </option>
+                                </ng-container>
+                            </select>
+                            <label for="">
+                                Sucursal
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+                
+            </div>
+            <div class="px-2 d-inline">
+                <button [ngClass]="'kaze-btn kaze-btn-' +( formResponsables.value.id == '' ? 'primary' : 'warning')" type="button" (click)="onSubmitFormResponsables($event)">
+                    <fa-icon [icon]="faPlus"/> {{ formResponsables.value.id == '' ? 'Dar de alta' : 'Modificar' }}
+                </button>
+            </div>
+            
+            <div class="px-2 d-inline">
+                <button [ngClass]="'kaze-btn kaze-btn-warning'" type="button" (click)="mostrarModalBuscarResponsables = true">
+                    <fa-icon [icon]="faSearch"/> Buscar
+                </button>
+            </div>
+            
+            <div class="px-2 d-inline">
+                <button [ngClass]="'kaze-btn kaze-btn-info'" type="button" (click)="limpiar()">
+                    <fa-icon [icon]="faBroom"/> Limpiar
+                </button>
+            </div>
+        </form>
+        <hr>
+        <h3>
+            Mapa de Responsables por Sucursal
+        </h3>
+        <br>
+        <div class="row">
+            <div class="col-lg-4">
+                <form (keydown.enter)="$event.preventDefault()" [formGroup]="formSucursalMapa"
+                (ngSubmit)="onSubmitFormSucursalMapa($event)">
+                
+                    <div class="kaze-form-control active">
+                        <select formControlName="id_sucursal" id="" (ngModelChange)="onSubmitFormSucursalMapa($event)">
+                            <option value="">Seleccionar sucursal</option>
+                            <ng-container *ngFor="let item of options_sucursales">
+                                <option [value]="item.id">{{item.id+". "+ item.nombre }} </option>
+                            </ng-container>
+                        </select>
+                        <label for="">
+                            Seleccionar sucursal
+                        </label>
+                    </div>
+                </form>
+                <hr>
+                <h5>
+                    Responsables
+                </h5>
+                <div class="table-responsive" style="border-radius: 10px;">
+                    <table class="table table-hover" >
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of data_responsables; index as i">
+                                <td style="cursor: pointer;" (click)="seleccionarResponsable(i)" [ngClass]="i == index_responsable_seleccionado ? 'bg-primary text-white' : ''">{{ item.nombreresponsable+" ("+item.descripcion_puesto+")" }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="kaze-btn kaze-btn-primary" (click)="guardarCambiosMapaResponsablesTiposMaquinas()">
+                    Guardar cambios
+                </button>
+                <!-- <ul>
+                    <li *ngFor="let item of data_responsables">
+                        {{ item.nombreresponsable }}
+                    </li>
+                </ul> -->
+            </div>
+            
+            <div class="col-lg-5">
+                <h5>
+                    Tipos de Máquina
+                </h5>
+                <br>
+                <div class="table-responsive" style="border-radius: 10px;">
+                    <table class="table table-hover" >
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of tipos_maquinas; index as i">
+                                <td style="cursor: pointer;" (click)="changeSeleccionarTipoMaquina(i)" [ngClass]="index_maquinas_seleccionadas[i].seleccionada == 1 ? 'bg-primary text-white' : ''">{{ item.nombre+" ("+item.nombre_eng+")" }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+<app-modal [showModal]="mostrarModalBuscarResponsables" (modalChange)="modalBuscarResponsablesChange($event)" title="Buscar respnsables">
+
+    <div class="p-3">
+
+        <form [formGroup]="formularioBusquedaResponsables" (keydown.enter)="pagina_actual = 0">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="kaze-form-control active">
+                        <select name="" id=""  formControlName="crit" >
+                            <option value="">Seleccionar criterio</option>
+                            <ng-container *ngFor="let item of criteriosResponsables">
+                                <option [value]="item.value">
+                                    {{ item.text }}
+                                </option>
+                            </ng-container>
+                        </select>
+                        <label for="">
+                            Criterio
+                        </label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="kaze-form-control active">
+                        <select name="" id=""  formControlName="mode" >
+                            <option value="">Seleccionar modo</option>
+                            <ng-container *ngFor="let item of modosResponsables">
+                                <option [value]="item.value">
+                                    {{ item.text }}
+                                </option>
+                            </ng-container>
+                        </select>
+                        <label for="">
+                            Modo de búsqueda
+                        </label>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <app-kaze-form-input label="Campo de búsqueda" formControlName="search"/>
+                </div>
+ 
+            </div>
+            
+            <div style="text-align: center; " class="mt-3">
+    
+                <ul class="kaze-pagination" style="display: flex; justify-content: center;">
+                    <li *ngFor="let e of ['<<', '<', cargandoResponsables ? '...' : (pagina_actual+1) + '/' + cantidad_paginas, '>', '>>']; let index = index"
+                        (click)="pageHandler(e)">
+                        <b>{{ e }}</b>
+                    </li>
+                </ul>
+            </div>
+
+            <button class="kaze-btn kaze-btn-warning" (click)="pagina_actual = 0; obtenerListaResponsables()">
+                <fa-icon [icon]="faFilter" /> Buscar
+            </button>
+            <hr>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th *ngFor="let item of criteriosResponsables">
+                            {{item.text.toUpperCase()}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="cursor: pointer;" *ngFor="let item of resultados_responsables; index as i" (click)="editar(i)">
+                        <td *ngFor="let itemr of Object.values(item)">
+                            <ng-container *ngIf="!isObject(itemr)">
+                                {{itemr}}
+                            </ng-container>
+                    
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</app-modal>

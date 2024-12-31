@@ -1,0 +1,83 @@
+.kaze-navbar {
+  height: 100%;
+  width: 250px;
+  background-color: #333;
+  color: white;
+  overflow: hidden;
+  transition: width 0.3s;
+  position: fixed;
+
+}
+
+.kaze-navbar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.kaze-navbar li {
+  padding: 15px;
+  cursor: pointer;
+}
+
+.kaze-toggle-button {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+
+.kaze-collapsed {
+  width: 0;
+  transition: width 0.3s;
+}
+
+@media (max-width: 768px) {
+  .kaze-navbar {
+    width: 100%;
+    height: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    overflow: hidden;
+    transition: height 0.3s;
+  }
+
+  .kaze-collapsed {
+    height: 0;
+    transition: height 0.3s;
+  }
+
+  .kaze-navbar ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .kaze-navbar li {
+    padding: 10px;
+    text-align: center;
+  }
+
+  .kaze-toggle-button {
+    top: 10px;
+    right: 10px;
+  }
+
+  /* Ajustamos la posición del botón cuando el navbar está colapsado en pantallas pequeñas */
+  .kaze-navbar.collapsed .kaze-toggle-button {
+    right: 10px;
+  }
+}
+
+
+.kaze-navbar-content {
+  flex: 1;
+  padding: 20px;
+}

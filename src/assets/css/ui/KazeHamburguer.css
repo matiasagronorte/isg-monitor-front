@@ -1,0 +1,19 @@
+/* Nuevo CSS para el botón flotante */
+
+.kaze-hamburger-btn {
+    position: fixed; /* Hacemos que el botón sea fijo en la ventana */
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    z-index: 2; /* Aseguramos que el botón esté por encima del contenido */
+  }
+  
+  .kaze-bar {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 5px 0;
+  }
+  

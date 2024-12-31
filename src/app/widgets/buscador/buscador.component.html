@@ -1,0 +1,84 @@
+<form [formGroup]="formularioBusqueda" (keydown.enter)="pagina_actual = 0">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="kaze-form-control active">
+                <select name="crit" id=""  formControlName="crit" >
+                    <option value="">Seleccionar criterio</option>
+                    <ng-container *ngFor="let item of criterios">
+                        <option [value]="item.value">
+                            {{ item.text }}
+                        </option>
+                    </ng-container>
+                </select>
+                <label for="">
+                    Criterio
+                </label>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="kaze-form-control active">
+                <select name="mode" id=""  formControlName="mode" >
+                    <option value="">Seleccionar modo</option>
+                    <ng-container *ngFor="let item of modos">
+                        <option [value]="item.value">
+                            {{ item.text }}
+                        </option>
+                    </ng-container>
+                </select>
+                <label for="">
+                    Modo búsqueda
+                </label>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <app-kaze-form-input label="Campo de búsqueda" formControlName="search" name="search"/>
+        </div>
+         
+    </div>
+    <div style="text-align: center;" class="pt-3">
+
+        <ul class="kaze-pagination" style="display: flex; justify-content: center;">
+            <li *ngFor="let e of ['<<', '<', cargandoPaquetes ? '...' : (pagina_actual+1) + '/' + cantidad_paginas, '>', '>>']; let index = index"
+                (click)="pageHandler(e)">
+                <b>{{ e }}</b>
+            </li>
+        </ul>
+    </div>
+    <button class="kaze-btn kaze-btn-warning" (click)="pagina_actual = 0; obtenerLista()">
+        <fa-icon [icon]="faSearch" /> Buscar
+    </button>
+    <hr>
+</form>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th *ngFor="let item of criterios">
+                    {{item.text.toUpperCase()}}
+                </th>
+                <!-- <th>Identificación</th>
+                <th>PIN</th>
+                <th>Datos Máquina</th>
+                <th>Organización</th>
+                <th>Razón social</th>
+                <th>Fecha inicio</th>
+                <th>Fecha fin</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="cursor: pointer;" *ngFor="let item of resultados; index as i" >
+                <td *ngFor="let itemr of Object.values(item)">
+                    {{itemr}}
+                </td>
+                <!-- <td>{{item.id}}</td>
+                <td>{{item.nombremaquina.split(".")[0] }}</td>
+                <td>{{item.nombremaquina}}</td>
+                <td>{{item.nombreorganizacion}}</td>
+                <td>{{item.razonsocial}}</td>
+                <td>{{formatearFecha(item.fechadesde)}}</td>
+                <td>{{formatearFecha(item.fechahasta)}}</td> -->
+
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,131 @@
+<div class="">
+    <app-navbar [isNavCollapsed]="collapsedNav" (collapseChange)="updateCollapse($event)" />
+    <div [ngClass]="'container-fluid p-5 app-content'+ (collapsedNav ? ' w-100 mx-0' : '')">
+        <h1><b>Coordinación de servicios</b></h1>
+        <br>
+        <div class="alert alert-secondary">
+            <legend>
+                Sucursal: {{ appSession.sucursal }}
+            </legend>
+            Responsable de servicios: <b> {{ appSession.nombre }} </b>
+        </div>
+        <div class="card my-3 p-3" style="background-color: #f9f9f9; border-color: #ffffff;">
+            <h5>
+                <b>Resumen de CORSVAP</b>
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Num.COR</th>
+                            <th>Organización</th>
+                            <th>Derivado por</th>
+                            <th>Maquinaria</th>
+                            <th>Fecha programada</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of lista_corsvap; index as i" style="cursor: pointer;"
+                            (click)="item_actual = lista_corsvap[i]; mostrarModalEditarCorsvap = true">
+                            <td> {{ item.num_corsvap }} </td>
+                            <td> {{ item.cliente?.nombre }} </td>
+                            <td> {{ 'Matias Santa Cruz' }} </td>
+                            <td> {{ item.datos_maquina?.vin+". "+item.datos_maquina?.nombre_tipomaquina+". "+item.datos_maquina?.marca+" "+item.datos_maquina?.modelo }} </td>
+                            <td> {{ item.fechainiciotrabajo == null ? 'A determinar' : item.fechainiciotrabajo }} </td>
+                            <td> {{ 'Pendiente' }} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-modal [showModal]="mostrarModalEditarCorsvap" (modalChange)="modalEditarCorsvapChange($event)"
+    title="Editar datos de CORSVAP">
+    <div class="p-3" *ngIf="item_actual != undefined">
+        <legend>
+            COR: {{ item_actual.num_corsvap }}
+        </legend>
+        <div class="alert alert-secondary">
+            <p>Cliente: <b> {{ item_actual.cliente?.id_autologica + ". " + item_actual.cliente?.nombre }} </b></p>
+            <p>Máquina: <b>{{ item_actual.datos_maquina.vin+". "+item_actual.datos_maquina.nombre_tipomaquina+"."+item_actual.datos_maquina.marca+" "+item_actual.datos_maquina.modelo }}</b> </p>
+            <p>Diagnóstico: {{ item_actual.diagnostico }} </p>
+            <br>
+            <p>Fecha hora derivación: <b>{{ item_actual.fechahora }}</b> </p>
+            <p>Fecha esperada inicio trabajo: <b>{{ item_actual.fechavencimiento }}</b> </p>
+            <br>
+        </div>
+
+        <br>
+
+        Fecha de inicio de trabajo: <b>{{ item_actual.fechainiciotrabajo }}</b>
+
+        <ng-container *ngIf="item_actual.fechainiciotrabajo == 'No iniciado'">
+            <hr>
+            <p>
+                Programar fecha de inicio
+            </p>
+            <br>
+            <div class="row">
+                <div class="col-lg-4">
+                    <form (keydown.enter)="$event.preventDefault()" [formGroup]="formProgramarServicio">
+                        <app-kaze-form-input label="Fecha de inicio" type="date" [focusedParam]="true"
+                            formControlName="fechainiciotrabajo" />
+                    </form>
+                </div>
+                <div class="col-lg-4">
+                    <button class="kaze-btn kaze-btn-success" type="button" (click)="verificarProgramarFecha()">
+                        Programar fecha
+                    </button>
+                </div>
+                <div *ngIf="errorProgramarFecha != ''" class="col-lg-4">
+                    <div class="alert alert-danger text-white">
+                        {{ errorProgramarFecha }}
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container>
+            <div class="row">
+                <div class="col-lg-6">
+                    <br>
+
+                    <b>Finalización de trabajo demorada</b>
+
+                    <p>
+                        Debajo puede indicar el motivo por el cuál el servicio no fue iniciado en la fecha prevista
+                    </p>
+                    <br>
+
+                    <app-kaze-form-input label="Ingresar justificativo" />
+                    <div class="mt-3">
+                        <div class="px-2 d-inline">
+                            <button class="kaze-btn kaze-btn-success">
+                                Enviar
+                            </button>
+                        </div>
+    
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+    </div>
+</app-modal>
+<app-modal [showModal]="mostrarModalConfirmarProgramacion" (modalChange)="modalConfirmarProgramacionChange($event)"
+    title="Confirmar operación">
+    <div class="p-3" *ngIf="item_actual != undefined">
+        <div class="text-center">
+            <p>
+                ¿Desea indicar la fecha de programación de la orden?
+            </p>
+            <br>
+            <button class="kaze-btn kaze-btn-success" (click)="programarFechaInicioTrabajo()">
+                Confirmar
+            </button>
+        </div>
+    </div>
+</app-modal>

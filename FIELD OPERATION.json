@@ -1,0 +1,213 @@
+{
+    "links": [
+        {
+            "rel": "self",
+            "uri": "https://partnerapi.deere.com/platform/organizations/235310/fields/8a773d3c-e98a-4715-06d4-3a05c741f399/fieldOperations"
+        }
+    ],
+    "total": 2,
+    "values": [
+        {
+            "@type": "FieldOperation",
+            "fieldOperationType": "harvest",
+            "adaptMachineType": "combine",
+            "cropSeason": "2020",
+            "modifiedTime": "2023-02-08T05:31:18.326Z",
+            "startDate": "2020-05-02T11:59:30.996Z",
+            "endDate": "2020-05-03T18:36:57.887Z",
+            "cropName": "SOYBEANS",
+            "orgId": 235310,
+            "varieties": [
+                {
+                    "@type": "Product",
+                    "guid": "29e49c27-4bee-dc90-9ed0-182de5675655",
+                    "productType": "SEED",
+                    "productId": "fe5b92ed",
+                    "name": "Soybeans",
+                    "brand": "---",
+                    "tankMix": false
+                }
+            ],
+            "tasks": [],
+            "id": "MjM1MzEwXzYzZTMzMTkxM2YxYWI3ZGFjZTUyNWJmYg",
+            "links": [
+                {
+                    "@type": "Link",
+                    "rel": "field",
+                    "uri": "https://partnerapi.deere.com/platform/organizations/235310/fields/8a773d3c-e98a-4715-06d4-3a05c741f399"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "organization",
+                    "uri": "https://partnerapi.deere.com/platform/organizations/235310"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "self",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOperations/MjM1MzEwXzYzZTMzMTkxM2YxYWI3ZGFjZTUyNWJmYg"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "client",
+                    "uri": "https://partnerapi.deere.com/platform/organizations/235310/clients/55372d6f-0000-1000-4022-e1e1e13dc968"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "farm",
+                    "uri": "https://partnerapi.deere.com/platform/organizations/235310/farms/3fd704c0-d9fa-4e45-8f5b-28511928887a"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "shapeFileAsync",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOps/MjM1MzEwXzYzZTMzMTkxM2YxYWI3ZGFjZTUyNWJmYg"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "fieldOperationMachines",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOperations/MjM1MzEwXzYzZTMzMTkxM2YxYWI3ZGFjZTUyNWJmYg/fieldOperationMachines"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "fieldOperationWorkNotes",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOperations/MjM1MzEwXzYzZTMzMTkxM2YxYWI3ZGFjZTUyNWJmYg/workNotes"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "harvestMoistureResult",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOperations/MjM1MzEwXzYzZTMzMTkxM2YxYWI3ZGFjZTUyNWJmYg/measurementTypes/HarvestMoistureResult"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "harvestSpeedResult",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOperations/MjM1MzEwXzYzZTMzMTkxM2YxYWI3ZGFjZTUyNWJmYg/measurementTypes/HarvestSpeedResult"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "harvestYieldResult",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOperations/MjM1MzEwXzYzZTMzMTkxM2YxYWI3ZGFjZTUyNWJmYg/measurementTypes/HarvestYieldResult"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "harvestYieldContourResult",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOperations/MjM1MzEwXzYzZTMzMTkxM2YxYWI3ZGFjZTUyNWJmYg/measurementTypes/HarvestYieldContourResult"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "harvestWetMassResult",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOperations/MjM1MzEwXzYzZTMzMTkxM2YxYWI3ZGFjZTUyNWJmYg/measurementTypes/HarvestWetMassResult"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "measurementTypes",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOperations/MjM1MzEwXzYzZTMzMTkxM2YxYWI3ZGFjZTUyNWJmYg/measurementTypes"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "operators",
+                    "uri": "https://partnerapi.deere.com/platform/organizations/235310/operators"
+                }
+            ]
+        },
+        {
+            "@type": "FieldOperation",
+            "fieldOperationType": "harvest",
+            "adaptMachineType": "combine",
+            "cropSeason": "2019",
+            "modifiedTime": "2023-02-08T05:26:36.065Z",
+            "startDate": "2019-11-10T12:30:43.190Z",
+            "endDate": "2019-11-11T12:24:44.975Z",
+            "cropName": "WHEAT",
+            "orgId": 235310,
+            "varieties": [
+                {
+                    "@type": "Product",
+                    "guid": "77b5e0c6-878e-d89b-41b3-2882916eba10",
+                    "productType": "SEED",
+                    "productId": "4f49ffb4",
+                    "name": "Wheat",
+                    "brand": "---",
+                    "tankMix": false
+                }
+            ],
+            "tasks": [],
+            "id": "MjM1MzEwXzYzZTMzMjEwM2YxYWI3ZGFjZTUyNWM0MQ",
+            "links": [
+                {
+                    "@type": "Link",
+                    "rel": "field",
+                    "uri": "https://partnerapi.deere.com/platform/organizations/235310/fields/8a773d3c-e98a-4715-06d4-3a05c741f399"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "organization",
+                    "uri": "https://partnerapi.deere.com/platform/organizations/235310"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "self",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOperations/MjM1MzEwXzYzZTMzMjEwM2YxYWI3ZGFjZTUyNWM0MQ"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "client",
+                    "uri": "https://partnerapi.deere.com/platform/organizations/235310/clients/55372d6f-0000-1000-4022-e1e1e13dc968"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "farm",
+                    "uri": "https://partnerapi.deere.com/platform/organizations/235310/farms/3fd704c0-d9fa-4e45-8f5b-28511928887a"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "shapeFileAsync",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOps/MjM1MzEwXzYzZTMzMjEwM2YxYWI3ZGFjZTUyNWM0MQ"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "fieldOperationMachines",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOperations/MjM1MzEwXzYzZTMzMjEwM2YxYWI3ZGFjZTUyNWM0MQ/fieldOperationMachines"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "fieldOperationWorkNotes",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOperations/MjM1MzEwXzYzZTMzMjEwM2YxYWI3ZGFjZTUyNWM0MQ/workNotes"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "harvestMoistureResult",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOperations/MjM1MzEwXzYzZTMzMjEwM2YxYWI3ZGFjZTUyNWM0MQ/measurementTypes/HarvestMoistureResult"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "harvestSpeedResult",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOperations/MjM1MzEwXzYzZTMzMjEwM2YxYWI3ZGFjZTUyNWM0MQ/measurementTypes/HarvestSpeedResult"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "harvestYieldResult",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOperations/MjM1MzEwXzYzZTMzMjEwM2YxYWI3ZGFjZTUyNWM0MQ/measurementTypes/HarvestYieldResult"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "harvestYieldContourResult",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOperations/MjM1MzEwXzYzZTMzMjEwM2YxYWI3ZGFjZTUyNWM0MQ/measurementTypes/HarvestYieldContourResult"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "harvestWetMassResult",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOperations/MjM1MzEwXzYzZTMzMjEwM2YxYWI3ZGFjZTUyNWM0MQ/measurementTypes/HarvestWetMassResult"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "measurementTypes",
+                    "uri": "https://partnerapi.deere.com/platform/fieldOperations/MjM1MzEwXzYzZTMzMjEwM2YxYWI3ZGFjZTUyNWM0MQ/measurementTypes"
+                },
+                {
+                    "@type": "Link",
+                    "rel": "operators",
+                    "uri": "https://partnerapi.deere.com/platform/organizations/235310/operators"
+                }
+            ]
+        }
+    ]
+}

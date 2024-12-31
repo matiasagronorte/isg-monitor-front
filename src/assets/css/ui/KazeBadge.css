@@ -1,0 +1,63 @@
+.kaze-badge {
+    padding: 4px 20px;
+    font-size: 14px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    border-radius: 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+.kaze-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: left 0.3s ease;
+}
+
+.kaze-badge:hover::before {
+    left: 100%;
+}
+
+.kaze-badge-inner-text {
+    display: flex;
+    align-items: center !important;
+}
+
+.kaze-badge.hovered {
+    transform: scale(1.05); /* Ajusta el valor según tus preferencias de zoom */
+}
+
+.kaze-badge:active {
+    transform: scale(0.9); /* Ajusta el valor según tus preferencias de zoom out al hacer clic */
+}
+
+.kaze-badge-primary {
+    background-color: #486fcc;
+}
+
+.kaze-badge-secondary {
+    background-color: #929292;
+}
+
+.kaze-badge-success {
+    background-color: #479a47;
+}
+
+.kaze-badge-warning {
+    background-color: #d2a92f;
+}
+
+.kaze-badge-danger {
+    background-color: #f84e52;
+}
+
+.kaze-badge-info {
+    background-color: #559d9b;
+}

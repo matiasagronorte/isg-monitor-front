@@ -1,0 +1,18 @@
+<div class="kaze-form-control" [ngClass]="{'active': focusedParam || value}">
+    <input
+      [type]="type"
+      [id]="formid + '-' + name"
+      [(ngModel)]="value"
+      (focus)="handleFocus()"
+      (blur)="handleBlur()"
+      (change)="kazeOnChange.emit($event)"
+      [readonly]="readonly"
+      (keyup)="kazeOnKeyUp.emit($event)"
+      (input)="onChange(value)"
+    />
+    <label>{{ label }}</label>
+    <div *ngIf="detail" style="width: 100%; text-align: right;">
+      <small style="color: grey">{{ detail }}</small>
+    </div>
+  </div>
+  

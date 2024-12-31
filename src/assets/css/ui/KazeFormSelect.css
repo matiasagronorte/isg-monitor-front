@@ -1,0 +1,58 @@
+/* FormSelect.css */
+.kaze-form-select {
+    position: relative;
+    /* margin-bottom: 25px; */
+}
+
+.kaze-form-select label {
+    position: absolute;
+    top: 0.65rem;
+    left: 18px;
+    pointer-events: none;
+    transition: 0.2s ease-out all;
+    color: rgb(125, 125, 125);
+}
+
+.kaze-select-container {
+  position: relative;
+  width: 100%;
+}
+
+.custom-select {
+    appearance: none;
+    background-color: white;
+    border-radius: 15px;
+    padding: 0.6rem;
+    color: black;
+    border-color: #898989;
+    border-width: 0px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.kaze-select-arrow {
+  content: '\25BC'; /* Código Unicode para una flecha hacia abajo */
+  font-size: 16px;
+  color: #000000;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+}
+
+.kaze-select:focus ~ label,
+.kaze-select:valid ~ label {
+    top: -0.8rem;
+    font-size: 12px;
+    color: #000000;
+}
+
+.kaze-form-select.active label {
+    top: -0.8rem;
+    font-size: .9rem;
+    color: white;
+    background-color: #555050;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 20px;
+}

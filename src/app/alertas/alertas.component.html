@@ -1,0 +1,268 @@
+<div class="">
+
+    <app-navbar [isNavCollapsed]="collapsedNav" (collapseChange)="updateCollapse($event)" />
+    <div [ngClass]="'container-fluid p-5 app-content'+ (collapsedNav ? ' w-100 mx-0' : '')">
+        <h1><b>Gestión de alertas</b></h1>
+        <br>
+        <form (keydown.enter)="$event.preventDefault()" [formGroup]="formAlertas"
+        (ngSubmit)="onSubmitFormAlertas($event)">
+            <div class="card my-3 p-3" style="background-color: #f9f9f9; border-color: #ffffff;">
+
+                <div class="row">
+                    <div class="col-lg-2 mb-4">
+                        <app-kaze-form-input label="Código interno" formControlName="id"/>
+                    </div>
+                    
+                    <div class="col-lg-3 mb-4">
+                        <app-kaze-form-input label="Codigo (AAA nnnnnn.nn)" formControlName="codigo" />
+                    </div>
+                    
+                    <div class="col-lg-3 mb-4 d-none">
+                        <app-kaze-form-input label="Tipo" formControlName="tipo" />
+                    </div>
+                    
+                    <div class="col-lg-3 mb-4 d-none">
+                        <!-- <app-kaze-form-select label="Zona de monitoreo" [options]="zonasMonitoreo" formControlName="zonamonitoreo"/> -->
+                        <div class="kaze-form-control active">
+                            <select name="" id=""  formControlName="color" >
+                                <option value="">Seleccionar color</option>
+                                <ng-container *ngFor="let item of coloresOptions">
+                                    <option [value]="item.value">{{item.text}}</option>
+                                </ng-container>
+                            </select>
+                            <label for="">
+                                Color
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 mb-4">
+                        <app-kaze-form-input label="Descripcion" formControlName="descripcion" />
+                    </div>
+                    
+                    <div class="col-lg-3 mb-4">
+                        <!-- <app-kaze-form-select label="Zona de monitoreo" [options]="zonasMonitoreo" formControlName="zonamonitoreo"/> -->
+                        <div class="kaze-form-control active">
+                            <select name="" id=""  formControlName="filtrarcsc" >
+                                <option value="">Seleccionar filtro</option>
+                                <option value="0">No filtrar (secundaria)</option>
+                                <option value="1">1- Primaria</option>
+                                <option value="2">2- Prioritaria</option>
+                                <option value="3">3- Urgente</option>
+                            </select>
+                            <label for="">
+                                Filtro CSC
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 mb-4">
+                        <!-- <app-kaze-form-select label="Zona de monitoreo" [options]="zonasMonitoreo" formControlName="zonamonitoreo"/> -->
+                        <div class="kaze-form-control active">
+                            <select name="" id=""  formControlName="idcategoria_alerta" >
+                                <option value="">Seleccionar categoría</option>
+                                <ng-container *ngFor="let item of options_categorias">
+                                    <option [value]="item.id"> {{ item.color+". "+item.tipo+". "+item.detalle.split(' ')[0] }} </option>
+                                </ng-container>
+                            </select>
+                            <label for="">
+                                Categoría de alerta
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 mb-4">
+                        <!-- <app-kaze-form-select label="Zona de monitoreo" [options]="zonasMonitoreo" formControlName="zonamonitoreo"/> -->
+                        <div class="kaze-form-control active">
+                            <select name="" id=""  formControlName="idcategoria_alerta_tope" >
+                                <option value="">Seleccionar categoría</option>
+                                <ng-container *ngFor="let item of options_categorias">
+                                    <option [value]="item.id"> {{ item.color+". "+item.tipo+". "+item.detalle.split(' ')[0] }} </option>
+                                </ng-container>
+                            </select>
+                            <label for="">
+                                Categoría tope de alerta
+                            </label>
+                        </div>
+                        <small class="text-secondary">
+                            Tope por escalado de recategorización
+                        </small>
+                    </div>
+                    
+                    <div class="col-lg-3 mb-4">
+                        <app-kaze-form-input type="number" label="Tiempo estimado resolucion" formControlName="tiempoestimadoresolucion" detail="Minutos"/>
+                    </div>
+
+                    <div class="col-lg-3 mb-4">
+                        <app-kaze-form-input type="number" label="Días para comenzar" formControlName="diasatencionderivacion" detail="Derivaciones a servicio"/>
+                    </div>
+
+                    <div class="col-lg-2 mb-4">
+                        <app-kaze-form-input type="number" label="Días para finalizar" formControlName="diasresolucionderivacion" detail="Derivaciones a servicio"/>
+                    </div>
+
+                    <div class="col-lg-3 mb-4">
+                        <app-kaze-form-input type="number" label="Repeticiones para avisar" formControlName="repeticionesaviso" detail="Repeticiones para aviso y escalado"/>
+                    </div>   
+                    <div class="col-lg-3 mb-4">
+                        <app-kaze-form-input type="number" label="Rango de días" formControlName="rangodiasrepeticionesaviso" detail="Rango de días para contar repeticiones"/>
+                    </div>   
+                    
+                    <div class="col-lg-4 mb-4">
+                        <app-kaze-form-input type="number" label="Segundos aviso" formControlName="segundosduracionaviso" detail="Cero: cuenta cualquier ocurrencia. Si no, cierra las que duren menos que este parámetro."/>
+                    </div>                    
+                </div>
+            </div>
+        </form>
+        <div class="px-2 d-inline">
+            <button class="kaze-btn kaze-btn-primary" (click)="onSubmitFormAlertas($event)">
+                <ng-container *ngIf="!enviandoFormulario">
+                    <fa-icon [icon]="formAlertas.value.id == '' ? faPlus : faEdit"/>
+                    <div class="d-inline">
+                        {{ formAlertas.value.id == '' ? 'Dar de alta' : 'Modificar' }}
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="enviandoFormulario">
+                    <div class="spinner-border">
+                        
+                    </div>
+                </ng-container>
+            </button>
+        </div>
+        <div class="px-2 d-inline">
+            <button class="kaze-btn kaze-btn-info" (click)="limpiarFormulario()">
+                <fa-icon [icon]="faBroom"/>
+                Limpiar
+            </button>    
+        </div>
+        <br>
+        <div class="row">
+
+        </div>
+        <hr>
+
+        <h3>
+            Lista de alertas
+        </h3>
+        <br>
+        <form [formGroup]="formularioBusqueda" (keydown.enter)="pagina_actual = 0">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="kaze-form-control active">
+                        <select name="" id=""  formControlName="crit" >
+                            <option value="">Seleccionar criterio</option>
+                            <ng-container *ngFor="let item of criteriosAlertas">
+                                <option [value]="item.value">
+                                    {{ item.text }}
+                                </option>
+                            </ng-container>
+                        </select>
+                        <label for="">
+                            Criterio
+                        </label>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="kaze-form-control active">
+                        <select name="" id=""  formControlName="mode" >
+                            <option value="">Seleccionar modo</option>
+                            <ng-container *ngFor="let item of modosAlertas">
+                                <option [value]="item.value">
+                                    {{ item.text }}
+                                </option>
+                            </ng-container>
+                        </select>
+                        <label for="">
+                            Modo de búsqueda
+                        </label>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <app-kaze-form-input label="Campo de búsqueda" formControlName="search"/>
+                </div>
+ 
+            </div>
+            
+            <div style="text-align: center; " class="mt-3">
+    
+                <ul class="kaze-pagination" style="display: flex; justify-content: center;">
+                    <li *ngFor="let e of ['<<', '<', cargandoAlertas ? '...' : (pagina_actual+1) + '/' + cantidad_paginas, '>', '>>']; let index = index"
+                        (click)="pageHandler(e)">
+                        <b>{{ e }}</b>
+                    </li>
+                </ul>
+            </div>
+
+            <button class="kaze-btn kaze-btn-warning" (click)="pagina_actual = 0; obtenerListaAlertas()">
+                <fa-icon [icon]="faFilter" /> Buscar
+            </button>
+            <hr>
+        </form>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th *ngFor="let item of criteriosAlertas">
+                            {{item.text.toUpperCase()}}
+                        </th>
+                        <!-- <th>Identificación</th>
+                        <th>PIN</th>
+                        <th>Datos Máquina</th>
+                        <th>Organización</th>
+                        <th>Razón social</th>
+                        <th>Fecha inicio</th>
+                        <th>Fecha fin</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="cursor: pointer;" *ngFor="let item of resultados_alertas; index as i" (click)="editar(i)">
+                        <td *ngFor="let itemr of Object.values(item)">
+                            <ng-container *ngIf="!isObject(itemr)">
+                                {{itemr}}
+                            </ng-container>
+                    
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<app-modal [showModal]="mostrarModalMaquinarias" (modalChange)="modalMaquinariasChange($event)" title="Ingresar PIN de maquinaria">
+
+    <div class="ng-autocomplete" style="width: 100%;">
+        <ng-autocomplete [data]="dataMaq" [searchKeyword]="keyword" placeholder="Ingresar PIN"
+            (selected)='selectMaquinariaEvent($event)' (inputChanged)='onMaquinariaChangeSearch($event)' (inputFocused)='onMaquinariaFocused($event)'
+            [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate">
+        </ng-autocomplete>
+
+        <ng-template #itemTemplate let-item>
+            <a [innerHTML]="item.name"></a>
+        </ng-template>
+
+        <ng-template #notFoundTemplate let-notFound>
+            <div [innerHTML]="'Sin resultados'"></div>
+        </ng-template>
+    </div>
+
+</app-modal>
+
+<app-modal [showModal]="mostrarModalOrganizaciones" (modalChange)="modalOrganizacionesChange($event)" title="Ingresar organización">
+
+    <div class="ng-autocomplete" style="width: 100%;">
+        <ng-autocomplete [data]="dataOrg" [searchKeyword]="keywordOrganizaciones" placeholder="Ingresar nombre"
+            (selected)='selectOrganizacionEvent($event)' (inputChanged)='onOrganizacionChangeSearch($event)' (inputFocused)='onOrganizacionFocused($event)'
+            [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate">
+        </ng-autocomplete>
+
+        <ng-template #itemTemplate let-item>
+            <a [innerHTML]="item.name"></a>
+        </ng-template>
+
+        <ng-template #notFoundTemplate let-notFound>
+            <div [innerHTML]="'Sin resultados'"></div>
+        </ng-template>
+    </div>
+
+</app-modal>

@@ -1,0 +1,84 @@
+.kaze-checkbox {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.kaze-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.kaze-checkmark {
+    position: relative;
+    width: 24px; /* Tamaño del checkbox */
+    height: 24px; /* Tamaño del checkbox */
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.kaze-checkbox input:checked + .kaze-checkmark {
+    background-color: #3498db;
+    border-color: #3498db;
+    transform: scale(1.2);
+    /* Hacemos un zoom inicial */
+    transition: transform 0.2s ease-out;
+    /* Agregamos la transición de zoom */
+}
+
+.kaze-checkmark:after {
+    content: '';
+    position: absolute;
+    display: none;
+}
+
+.kaze-checkbox input:checked + .kaze-checkmark:after {
+    display: block;
+    animation: checkmark 0.2s ease-out;
+    /* Agregamos la animación */
+}
+
+@keyframes checkmark {
+    0% {
+        transform: scale(0);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.kaze-checkmark:after {
+    left: 7px;
+    top: 3px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.kaze-checkbox .kaze-checkmark {
+    cursor: pointer;
+    user-select: none;
+}
+
+.kaze-checkbox .kaze-label {
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Hover effect */
+.kaze-checkbox:hover .kaze-checkmark {
+    border-color: #2980b9;
+}
+
+.kaze-checkbox:hover input:checked + .kaze-checkmark {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}

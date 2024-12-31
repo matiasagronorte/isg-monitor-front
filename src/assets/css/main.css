@@ -1,0 +1,920 @@
+:host {
+    --bright-blue: oklch(51.01% 0.274 263.83);
+    --electric-violet: oklch(53.18% 0.28 296.97);
+    --french-violet: oklch(47.66% 0.246 305.88);
+    --vivid-pink: oklch(69.02% 0.277 332.77);
+    --hot-red: oklch(61.42% 0.238 15.34);
+    --orange-red: oklch(63.32% 0.24 31.68);
+
+    --gray-900: oklch(19.37% 0.006 300.98);
+    --gray-700: oklch(36.98% 0.014 302.71);
+    --gray-400: oklch(70.9% 0.015 304.04);
+
+    --red-to-pink-to-purple-vertical-gradient: linear-gradient(180deg,
+            var(--orange-red) 0%,
+            var(--vivid-pink) 50%,
+            var(--electric-violet) 100%);
+
+    --red-to-pink-to-purple-horizontal-gradient: linear-gradient(90deg,
+            var(--orange-red) 0%,
+            var(--vivid-pink) 50%,
+            var(--electric-violet) 100%);
+
+    --pill-accent: var(--bright-blue);
+
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+        "Segoe UI Symbol";
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+    font-size: 3.125rem;
+    color: var(--gray-900);
+    font-weight: 500;
+    line-height: 100%;
+    letter-spacing: -0.125rem;
+    margin: 0;
+    font-family: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+        "Segoe UI Symbol";
+}
+
+p {
+    margin: 0;
+    color: var(--gray-700);
+}
+
+main {
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    box-sizing: inherit;
+    position: relative;
+}
+
+.angular-logo {
+    max-width: 9.2rem;
+}
+
+.content {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    max-width: 700px;
+    margin-bottom: 3rem;
+}
+
+.content h1 {
+    margin-top: 1.75rem;
+}
+
+.content p {
+    margin-top: 1.5rem;
+}
+
+.divider {
+    width: 1px;
+    background: var(--red-to-pink-to-purple-vertical-gradient);
+    margin-inline: 0.5rem;
+}
+
+.pill-group {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+}
+
+.pill {
+    display: flex;
+    align-items: center;
+    --pill-accent: var(--bright-blue);
+    background: color-mix(in srgb, var(--pill-accent) 5%, transparent);
+    color: var(--pill-accent);
+    padding-inline: 0.75rem;
+    padding-block: 0.375rem;
+    border-radius: 2.75rem;
+    border: 0;
+    transition: background 0.3s ease;
+    font-family: var(--inter-font);
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.4rem;
+    letter-spacing: -0.00875rem;
+    text-decoration: none;
+}
+
+.pill:hover {
+    background: color-mix(in srgb, var(--pill-accent) 15%, transparent);
+}
+
+.pill-group .pill:nth-child(6n + 1) {
+    --pill-accent: var(--bright-blue);
+}
+
+.pill-group .pill:nth-child(6n + 2) {
+    --pill-accent: var(--french-violet);
+}
+
+.pill-group .pill:nth-child(6n + 3),
+.pill-group .pill:nth-child(6n + 4),
+.pill-group .pill:nth-child(6n + 5) {
+    --pill-accent: var(--hot-red);
+}
+
+.pill-group svg {
+    margin-inline-start: 0.25rem;
+}
+
+.social-links {
+    display: flex;
+    align-items: center;
+    gap: 0.73rem;
+    margin-top: 1.5rem;
+}
+
+.social-links path {
+    transition: fill 0.3s ease;
+    fill: var(--gray-400);
+}
+
+.social-links a:hover svg path {
+    fill: var(--gray-900);
+}
+
+@media screen and (max-width: 650px) {
+    .content {
+        flex-direction: column;
+        width: max-content;
+    }
+
+    .divider {
+        height: 1px;
+        width: 100%;
+        background: var(--red-to-pink-to-purple-horizontal-gradient);
+        margin-block: 1.5rem;
+    }
+}
+
+.kaze-badge {
+    padding: 4px 20px;
+    font-size: 14px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    border-radius: 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+.kaze-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: left 0.3s ease;
+}
+
+.kaze-badge:hover::before {
+    left: 100%;
+}
+
+.kaze-badge-inner-text {
+    display: flex;
+    align-items: center !important;
+}
+
+.kaze-badge.hovered {
+    transform: scale(1.05);
+    /* Ajusta el valor según tus preferencias de zoom */
+}
+
+.kaze-badge:active {
+    transform: scale(0.9);
+    /* Ajusta el valor según tus preferencias de zoom out al hacer clic */
+}
+
+.kaze-badge-primary {
+    background-color: #486fcc;
+}
+
+.kaze-badge-secondary {
+    background-color: #929292;
+}
+
+.kaze-badge-success {
+    background-color: #479a47;
+}
+
+.kaze-badge-warning {
+    background-color: #d2a92f;
+}
+
+.kaze-badge-danger {
+    background-color: #f84e52;
+}
+
+.kaze-badge-info {
+    background-color: #559d9b;
+}
+
+.kaze-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+.kaze-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: left 0.3s ease;
+}
+
+.kaze-btn:hover::before {
+    left: 100%;
+}
+
+.kaze-btn-inner-text {
+    display: flex;
+    align-items: center !important;
+}
+
+.kaze-btn.hovered {
+    transform: scale(1.05);
+    /* Ajusta el valor según tus preferencias de zoom */
+}
+
+.kaze-btn:active {
+    transform: scale(0.9);
+    /* Ajusta el valor según tus preferencias de zoom out al hacer clic */
+}
+
+.kaze-btn-primary {
+    background-color: #486fcc;
+}
+
+.kaze-btn-secondary {
+    background-color: #929292;
+}
+
+.kaze-btn-success {
+    background-color: #479a47;
+}
+
+.kaze-btn-warning {
+    background-color: #d2a92f;
+}
+
+.kaze-btn-danger {
+    background-color: #f84e52;
+}
+
+.kaze-btn-info {
+    background-color: #559d9b;
+}
+
+.kaze-checkbox {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.kaze-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.kaze-checkmark {
+    position: relative;
+    width: 24px;
+    /* Tamaño del checkbox */
+    height: 24px;
+    /* Tamaño del checkbox */
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.kaze-checkbox input:checked+.kaze-checkmark {
+    background-color: #3498db;
+    border-color: #3498db;
+    transform: scale(1.2);
+    /* Hacemos un zoom inicial */
+    transition: transform 0.2s ease-out;
+    /* Agregamos la transición de zoom */
+}
+
+.kaze-checkmark:after {
+    content: '';
+    position: absolute;
+    display: none;
+}
+
+.kaze-checkbox input:checked+.kaze-checkmark:after {
+    display: block;
+    animation: checkmark 0.2s ease-out;
+    /* Agregamos la animación */
+}
+
+@keyframes checkmark {
+    0% {
+        transform: scale(0);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.kaze-checkmark:after {
+    left: 7px;
+    top: 3px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.kaze-checkbox .kaze-checkmark {
+    cursor: pointer;
+    user-select: none;
+}
+
+.kaze-checkbox .kaze-label {
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Hover effect */
+.kaze-checkbox:hover .kaze-checkmark {
+    border-color: #2980b9;
+}
+
+.kaze-checkbox:hover input:checked+.kaze-checkmark {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+.kaze-cloudy-background {
+    position: absolute;
+    width: calc(100% - 280px);
+    height: 100%;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    filter: blur(20px);
+    z-index: -1;
+}
+
+.kaze-cloudy-background::before {
+    content: '';
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    width: calc(100% - 30px);
+    height: 100%;
+}
+
+/* FormInput.css */
+
+.kaze-form-control::-webkit-datetime-edit-year-field:not([aria-valuenow]),
+.kaze-form-control::-webkit-datetime-edit-month-field:not([aria-valuenow]),
+.kaze-form-control::-webkit-datetime-edit-day-field:not([aria-valuenow]) {
+    color: transparent;
+}
+
+.kaze-form-control::-webkit-date-edit-year-field:not([aria-valuenow]),
+.kaze-form-control::-webkit-date-edit-month-field:not([aria-valuenow]),
+.kaze-form-control::-webkit-date-edit-day-field:not([aria-valuenow]) {
+    color: transparent;
+}
+
+.kaze-form-control {
+    position: relative;
+    /* margin-bottom: 25px; */
+}
+
+.kaze-form-control label {
+    position: absolute;
+    top: 0.65rem;
+    left: 18px;
+    pointer-events: none;
+    transition: 0.2s ease-out all;
+    color: rgb(125, 125, 125);
+}
+
+.kaze-form-control input, textarea {
+    background-color: white;
+    border-radius: 15px;
+    padding: 0.6rem;
+    color: black;
+    border-color: #898989;
+    border-width: 0px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    /* Ajusta los valores según tus preferencias */
+}
+
+.kaze-form-control select {
+    background-color: white;
+    border-radius: 15px;
+    padding: 0.6rem;
+    color: black;
+    border-color: #898989;
+    border-width: 0px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    /* Ajusta los valores según tus preferencias */
+}
+
+.input:focus~label,
+.input:valid~label {
+    top: -0.8rem;
+    font-size: 12px;
+    color: #000000;
+}
+
+.kaze-form-control.active label {
+    top: -0.8rem;
+    font-size: .9rem;
+    color: white;
+    background-color: #555050;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 20px;
+
+}
+
+.kaze-preview-img {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    /* Ajusta los valores según tus preferencias */
+
+    border-radius: 20px;
+    max-width: 100%;
+    max-height: 200px;
+    margin-top: 1rem;
+    transition: transform 0.3s ease;
+    /* Agrega una transición suave para una animación más fluida */
+    cursor: pointer;
+    display: flex;
+}
+
+.kaze-preview-img:hover {
+
+    transform: scale(1.05);
+    /* Escala el elemento al 120% de su tamaño original */
+
+}
+
+/* Estilos para el fondo oscurecido del modal */
+.kaze-img-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    /* Fondo oscurecido */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Estilos para el contenido del modal */
+.kaze-img-modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+    /* Sombra */
+    max-width: 80%;
+    max-height: 80%;
+    overflow: auto;
+    position: relative;
+}
+
+/* Estilos para el botón de cierre (X) */
+.kaze-img-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 24px;
+    color: #ffffff;
+}
+
+/* FormSelect.css */
+.kaze-form-select {
+    position: relative;
+    /* margin-bottom: 25px; */
+}
+
+.kaze-form-select label {
+    position: absolute;
+    top: 0.65rem;
+    left: 18px;
+    pointer-events: none;
+    transition: 0.2s ease-out all;
+    color: rgb(125, 125, 125);
+}
+
+.kaze-select-container {
+    position: relative;
+    width: 100%;
+}
+
+.custom-select {
+    appearance: none;
+    background-color: white;
+    border-radius: 15px;
+    padding: 0.6rem;
+    color: black;
+    border-color: #898989;
+    border-width: 0px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.kaze-select-arrow {
+    content: '\25BC';
+    /* Código Unicode para una flecha hacia abajo */
+    font-size: 16px;
+    color: #000000;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+}
+
+.kaze-select:focus~label,
+.kaze-select:valid~label {
+    top: -0.8rem;
+    font-size: 12px;
+    color: #000000;
+}
+
+.kaze-form-select.active label {
+    top: -0.8rem;
+    font-size: .9rem;
+    color: white;
+    background-color: #555050;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 20px;
+}
+
+/* Estilos para la card */
+.kaze-glass-card {
+    /* width: 300px; */
+    padding: 1rem;
+    padding-top: 2.5rem;
+
+    border-radius: 20px;
+    /* Sombra suave */
+    background-color: rgba(255, 255, 255, 0.3);
+    /* Fondo translúcido */
+    backdrop-filter: blur(5px);
+    /* Efecto de desenfoque para mayor sensación de translucidez */
+
+    transition: transform 0.5s ease, opacity 0.5s ease;
+
+}
+
+/* Estilos adicionales (opcional) para el contenido dentro de la card */
+.kaze-glass-card h2 {
+    color: #333;
+}
+
+.kaze-glass-card p {
+    color: #666;
+}
+
+.kaze-card-container {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+    height: auto;
+    /* Altura inicial */
+    transition: height 0.3s ease-out;
+    /* Ajusta la transición a height */
+
+}
+
+.kaze-collapsed-card {
+    height: 0;
+    /* Altura a cero cuando se colapsa */
+    overflow: hidden;
+    transition: height 0.3s ease-out;
+    /* Ajusta la transición a height */
+
+}
+
+.kaze-glass-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+    z-index: -1;
+
+    /* Para asegurarse de que esté detrás de la card */
+}
+
+/* Nuevo CSS para el botón flotante */
+
+.kaze-hamburger-btn {
+    position: fixed;
+    /* Hacemos que el botón sea fijo en la ventana */
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    z-index: 2;
+    /* Aseguramos que el botón esté por encima del contenido */
+}
+
+.kaze-bar {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 5px 0;
+}
+
+.ReactModal__Overlay {
+    opacity: 0;
+    transition: opacity 300ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open {
+    opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+    opacity: 0;
+}
+
+.app-content{
+    position: absolute;
+    right: 0;
+    width: calc(100% - 250px);
+    background-color: #f0f0f0;
+}
+
+.kaze-navbar {
+    height: 100%;
+    width: 250px;
+    background-color: #333;
+    color: white;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    transition: width 0.3s;
+    z-index: 2;
+    position: fixed;
+}
+
+.kaze-navbar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.kaze-navbar li {
+    padding: 15px;
+    cursor: pointer;
+}
+
+.kaze-toggle-button {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    z-index: 2;
+    display: flex;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+
+.kaze-collapsed {
+    width: 0;
+    transition: width 0.3s;
+}
+
+
+
+
+.kaze-navbar-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.kaze-pagination {
+
+    width: fit-content;
+    background-color: white;
+    list-style-type: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    /* Ajusta los valores según tus preferencias */
+
+}
+
+.kaze-pagination li {
+    padding: 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.kaze-pagination li:hover {
+    background-color: rgb(230, 230, 230);
+}
+
+.App {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    position: absolute;
+    z-index: -2;
+}
+
+.kaze-snackbar {
+    margin: 0px !important;
+    /* font-weight: bold; */
+    font-size: larger;
+    /* bottom: 0px !important; */
+    /* position: absolute !important; */
+    /* background-color: cya; */
+}
+
+.mat-mdc-snack-bar-container {
+    position: fixed;
+    top: 0;
+}
+
+.mdc-snackbar--open .mdc-snackbar__surface {
+    background-color: rgb(27, 27, 27) !important;
+    color: white;
+    border-radius: 10px !important;
+    top: 2rem !important;
+    padding: 1rem;
+    position: fixed;
+}
+
+.mat-mdc-snack-bar-container {
+    position: fixed !important;
+    top: 5rem;
+}
+
+.kaze-loader {
+    border: 8px solid #116732;
+    border-top: 8px solid #ffdb33;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: kaze-spin 0.65s ease-in-out infinite;
+    margin: 50px auto;
+  }
+  
+  @keyframes kaze-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+li {
+    white-space: nowrap;
+}
+td {
+    white-space: nowrap;
+}
+th {
+    white-space: nowrap;
+}
+
+.kaze-navbar-list li {
+
+    padding: 1rem;
+    background-color: #4a4a4a;
+    border-radius: 10px;
+    margin-top: 1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+
+}
+
+.kaze-navbar-list li:hover {
+
+     /* padding: 1rem; */
+    background-color: #555555;
+    
+    /* border-radius: 10px;
+    margin-top: 1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;  */
+
+}
+
+.kaze-navbar-button-container {
+    background-color: #333 !important
+}
+
+@media (max-width: 768px) {
+    .kaze-navbar {
+        max-width: 100%;
+        width: 100%;
+        height: auto;
+        /* position: fixed;  */
+        top: 0;
+        /* left: 0;
+        right: 0; */
+        z-index: 2;
+        overflow: hidden;
+        transition: height 0.3s;
+    }
+
+    .kaze-collapsed {
+        height: 0;
+        transition: height 0.3s;
+    }
+
+    .kaze-navbar ul {
+        /* display: flex; */
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .kaze-navbar li {
+        padding: 10px;
+        text-align: center;
+    }
+
+    .kaze-toggle-button {
+        top: 10px;
+        right: 10px;
+    }
+
+    /* Ajustamos la posición del botón cuando el navbar está colapsado en pantallas pequeñas */
+    .kaze-navbar.collapsed .kaze-toggle-button {
+        right: 10px;
+    }
+
+    .app-content{
+        width: 100%;
+        padding: 0.5rem !important;
+        margin: 0;
+        background-color: #f0f0f0;
+
+    }
+    
+
+}
+
+.autocomplete-container .input-container input {
+    border-radius: 10px;
+    box-shadow: none;
+}

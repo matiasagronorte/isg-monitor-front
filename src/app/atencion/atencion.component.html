@@ -1,0 +1,906 @@
+<div class="">
+
+    <app-navbar [isNavCollapsed]="collapsedNav" (collapseChange)="updateCollapse($event)" [atendiendoCaso]="atendiendoParaCierreSesion" />
+    <div [ngClass]="'container-fluid p-5 app-content'+ (collapsedNav ? ' w-100 mx-0' : '')">
+        <h1><b>Seguimiento de alertas</b></h1>
+        <br>
+
+        <div class="px-2 d-inline">
+            <button [class]="'kaze-btn ' + (atendiendo ? 'kaze-btn-danger' : 'kaze-btn-warning')"
+                (click)="setAtendiendo(!atendiendo)">
+                {{ atendiendo ? 'Finalizar atención' : 'Iniciar sesión de atención' }}
+            </button>
+        </div>
+        <ng-container class="px-2 d-inline" *ngIf="atendiendo && item_actual == undefined">
+            <button class="kaze-btn kaze-btn-success" (click)="mostrarModalCrearCaso = true">
+                <fa-icon [icon]="faPlus" /> Agregar caso manual
+            </button>
+        </ng-container>
+        <br>
+        <br>
+        <legend>
+            Estado: {{ atendiendo? 'Atención activa' : 'No atendiendo' }}
+        </legend>
+
+        <div *ngIf="atendiendo">
+            <h3>
+                Mis tickets. {{ appSession.nombre }}
+            </h3>
+            <hr>
+            <div class="row ">
+                <div [class]="item_actual == undefined ? 'col-lg-7' : 'col-lg-12'">
+                    <div [class]=" 'row ' +(item_actual == undefined ? '' : 'd-none') ">
+                        <div class="col-lg-4">
+                            <div class="text-white text-center pb-2 alert alert-danger">
+                                <h5>
+                                    {{infourgentes}}
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="text-white text-center pb-2 alert alert-warning">
+
+                                <h5>
+                                    {{infoimportantes}}
+                                </h5>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="text-white text-center pb-2 alert alert-primary">
+                                <h5>
+                                    {{infoprimarios}}
+                                </h5>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div *ngIf="derivandoServicios" class="text-center">
+                        <h3>
+                            Derivando caso...
+                        </h3>
+                        <div class="spinner-border"></div>
+                    </div>
+
+                    <div *ngIf="item_actual != undefined && !derivandoServicios">
+
+                        <div *ngIf="actualPausadoOtro" class="alert alert-warning">
+                            <p>
+                                <b style="color: white;">Actualmente hay una revisión pausada</b>
+                            </p>
+                        </div>
+
+                        <div class="card p-3" style="border-color: white;">
+                            <legend>
+                                <b>Datos del ticket actual</b>
+                            </legend>
+                            <h3>
+                                {{ item_actual.additionalDetails }}
+                            </h3>
+                            <br>
+                            <p>
+                                {{ item_actual.organization }}
+                            </p>
+                            <small>
+                                {{ item_actual.pin }}
+                            </small>
+                            <br>
+                            <legend>
+                                <b>{{ item_actual.data_maquina.marca+" "+ item_actual.data_maquina.modelo}}</b>
+                            </legend>
+                            <hr>
+                            {{ item_actual.descripcionCompleta }}
+
+                            <hr>
+                            <legend>
+                                Tiempo transcurrido: {{ timeStampTicketActual == '' ? '' : temporizadorActual }}
+                            </legend>
+                            <p>
+                                <b>Estimado: {{ parseInt(item_actual.tiempoestimado) }}min</b>
+                            </p>
+                            <br>
+                            <div class="alert alert-secondary pb-0">
+                                <p>
+                                    <b>Contactos:</b>
+                                </p>
+                                <ul>
+                                    <li *ngFor="let item_c of item_actual.contactos">
+                                        <h5>{{ item_c.nombre+": "+item_c.telefono }}</h5>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-6 mb-4">
+                                    <ng-container *ngIf="item_actual.data_manual != undefined">
+                                        <button class="kaze-btn kaze-btn-primary"
+                                            (click)="window.open(item_actual.data_manual.link_manual)"
+                                            target="_blank">ABRIR SERV.ADV. DTC </button>
+                                    </ng-container>
+                                </div>
+                                <div class="col-6 mb-4">
+
+                                    <ng-container
+                                        *ngIf="item_actual.data_maquina != undefined && item_actual.data_maquina.link_manual_diagnostico != ''">
+                                        <button class="kaze-btn kaze-btn-primary"
+                                            (click)="window.open(item_actual.data_maquina.link_manual_diagnostico)"
+                                            target="_blank">ABRIR SERV.ADV. MANUAL</button>
+                                    </ng-container>
+                                </div>
+                                <div class="col-6 mb-4">
+
+                                    <ng-container
+                                        *ngIf="item_actual.data_maquina != undefined && item_actual.data_maquina.link_manual_reparacion != ''">
+                                        <button class="kaze-btn kaze-btn-primary"
+                                            (click)="window.open(item_actual.data_maquina.link_manual_reparacion)"
+                                            target="_blank">ABRIR SERV.ADV. REPARACION</button>
+                                    </ng-container>
+                                </div>
+                                <div class="col-6 mb-4">
+
+                                    <ng-container
+                                        *ngIf="item_actual.data_maquina != undefined && item_actual.data_maquina.link_manual_operador != ''">
+                                        <button class="kaze-btn kaze-btn-primary"
+                                            (click)="window.open(item_actual.data_maquina.link_manual_operador)"
+                                            target="_blank">ABRIR SERV.ADV. OPERADOR</button>
+                                    </ng-container>
+                                </div>
+                            </div>
+
+                            <br>
+                            <h3>
+                                Diario de seguimiento del caso
+                            </h3>
+                            <div class="my-2 px-2 d-inline">
+                                <button class="kaze-btn kaze-btn-success" (click)="mostrarModalAgregarAccion = true; obtenerAnalisisResoluciones(item_actual.data_maquina.idmodelo,item_actual.additionalDetails)">
+                                    <fa-icon [icon]="faPlus" /> Agregar acción
+                                </button>
+                            </div>
+                            <div class="table-responsive w-100">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Orden</th>
+                                            <th>
+                                                Acción
+                                            </th>
+                                            <th>Hora</th>
+                                            <th>
+                                                Quitar
+                                            </th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody cdkDropList (cdkDropListDropped)="drop($event)">
+                                    <!-- <tbody> -->
+                                        <tr *ngFor="let item of listaAccionesCaso;index as i" cdkDrag style="background-color: white;">
+                                            <td> 
+                                                <div class="text-center">
+                                                    <!-- <h3><b>{{ item.orden }}</b></h3> -->
+                                                    <h3><b>{{ i + 1 }}</b></h3>
+                                                </div>
+                                            </td>
+                                            <td> {{ item.descripcion }} </td>
+                                            <td> {{ formatearFechaHora(item.fechahora) }} </td>
+                                            <td>
+                                                <button class="kaze-btn kaze-btn-danger" (click)="quitarAccion(i)">
+                                                    <fa-icon [icon]="faClose" />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6 pt-3">
+                                    <div class="w-100">
+                                        <button class="kaze-btn kaze-btn-success"
+                                            (click)="obtenerDatosDerivacion(item_actual.id);mostrarModalDerivarServicios = true">
+                                            <fa-icon [icon]="faWrench" />
+                                            Derivar a servicios
+                                        </button>
+                                    </div>
+
+                                    <div class="mt-3 w-100">
+                                        <button
+                                            [class]="'kaze-btn kaze-btn-'+(actualPausadoLlamada ? 'success' : 'secondary')"
+                                            (click)="pausarRevision(item_actual.id)">
+                                            <fa-icon [icon]="faPhone" /> {{ actualPausadoLlamada ? "Resumir revisión" :
+                                            "Pausar por llamada" }}
+                                        </button>
+                                    </div>
+                                    <div class="mt-3 w-100">
+                                        <button
+                                            [class]="'kaze-btn kaze-btn-'+(actualPausadoLlamada ? 'success' : 'secondary')"
+                                            (click)="abrirModalSilenciarAlerta(item_actual.id)">
+                                            <fa-icon [icon]="faBellSlash" /> Silenciar alerta
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 pt-3">
+                                    <div class="w-100">
+                                        <button class="kaze-btn kaze-btn-warning"
+                                            (click)="formDerivarAlerta.get('idalerta')?.setValue(item_actual.id); obtenerUsuariosAtendiendo();">
+                                            <fa-icon [icon]="faUser" /> Derivar a usuario
+                                        </button>
+                                    </div>
+                                    <div class="mt-3 w-100">
+                                        <button class="kaze-btn kaze-btn-warning" (click)="mostrarModalExtender = true">
+                                            <fa-icon [icon]="faClock" /> Extender tiempo revisión
+                                        </button>
+                                    </div>
+
+                                    <div class="mt-3 w-100">
+                                        <button class="kaze-btn kaze-btn-info" (click)="mostrarModalPosponer = true">
+                                            <fa-icon [icon]="faClock" /> Posponer
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <button class="kaze-btn kaze-btn-success"
+                                (click)="formCierreAlerta.get('idalerta')?.setValue(item_actual.id);recuperarLinksMaquina(); mostrarModalCerrarTicket = true;">
+                                <fa-icon [icon]="faClose" /> Finalizar revisión
+                            </button>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div [class]="item_actual == undefined ? 'col-lg-5' : 'd-none'">
+                    <ul style="list-style-type: none;">
+
+                        <!-- ITERO LA LISTA DE TICKETS PARA MOSTRAR  -->
+
+                        <li *ngFor="let item of tickets; index as i">
+                            <div *ngIf="item.idusuario_csc_revision == 0 && item_actual == undefined || item.id != item_actual.id"
+                                class="card p-3 my-3 text-white" style="border-color: white;"
+                                [class]=" item.color == 'ROJO'  ||  item.color == 'RED' ? 'bg-danger' : item.color == 'AMARILLO' || item.color == 'YELLOW' ? 'bg-warning' : 'bg-primary'  ">
+                                <div class="row align-items-center">
+                                    <div class="row  w-100 justify-content-between" style="padding-right: 0px;">
+                                        <div class="col" style="padding-right: 0px;">
+                                            <div style="text-align: left;">
+                                                <h5>
+                                                    <b>{{ item.additionalDetails }}</b>
+                                                </h5>
+                                            </div>
+                                        </div>
+                                        <div class="col" style="padding-right: 0px;">
+                                            <div [class]=" 'alert alert-'+ (item.color == 'ROJO'  ||  item.color == 'RED' ? 'danger' : item.color == 'AMARILLO' || item.color == 'YELLOW' ? 'warning' : 'primary') + ' pb-2 text-white '"
+                                                style="text-align: right;">
+
+                                                <h5 class="">
+                                                    {{ item.data_categoria_alerta?.tipo }}
+                                                </h5>
+                                                <p>
+                                                    Nivel: {{ item.data_categoria_alerta?.id+'. '+
+                                                    item.data_categoria_alerta?.detalle.split(' ')[0] }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                                {{ item.date }}
+                                <hr>
+                                <div class="row">
+                                    <div class="col-lg-6">
+
+                                        <p>
+                                            <b>{{ item.organization }}</b>
+                                        </p>
+                                        PIN: {{ item.pin }}
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <p>{{ item.data_maquina?.categoria}}</p>
+                                        <p>{{ item.data_maquina?.marca+" "+item.data_maquina?.modelo }}</p>
+                                    </div>
+                                </div>
+                                <br>
+                                <div
+                                    [class]=" 'alert alert-'+ (item.color == 'ROJO'  ||  item.color == 'RED' ? 'danger' : item.color == 'AMARILLO' || item.color == 'YELLOW' ? 'warning' : 'primary') + ' text-white '">
+                                    <small style="overflow-x:hidden; text-wrap: pretty;">
+                                        {{ item.descripcionCompleta.substring(0,90)+"..." }}
+                                    </small>
+                                </div>
+                                <hr>
+                                <small>
+                                    <i>Tiempo estimado de resolución: {{ item.tiempoestimado }}min </i>
+                                </small>
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <div style="text-align: left;">
+                                            <p class="d-inline-block"> Cantidad de ocurrencias: <b
+                                                    style="font-size: 1.5rem;">{{item.cantidad}}</b> </p>
+                                            <br>
+                                            <p class="d-inline-block" *ngIf="item.duracion_maxima > 0" > Duración: {{item.duracion_maxima}}s </p>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="text-center">
+                                            <br>
+                                            <div class="px-2 d-inline">
+
+                                                <button class="kaze-btn kaze-btn-warning"
+                                                    (click)="iniciarAtencion(item.id,i)">
+                                                    Iniciar
+                                                </button>
+                                            </div>                                            
+                                            <div class="px-2 d-inline">
+                                                <button class="kaze-btn-primary kaze-btn" (click)="editarDefinicionAlerta(item.id)">
+                                                    Editar
+                                                </button>
+                                            </div>
+                                            <div class="px-2 d-inline">
+                                                <button class="kaze-btn kaze-btn-success"
+                                                    (click)="obtenerAnalisisResoluciones(item.data_maquina.idmodelo,item.additionalDetails)">
+                                                    Análisis
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-modal [showModal]="mostrarModalExtender" (modalChange)="modalExtenderChange($event)" title="Extender tiempo">
+
+    <div class="p-3">
+        <p>
+            Seleccione el tiempo extra requerido
+        </p>
+        <div class="kaze-form-control active">
+            <form (keydown.enter)="$event.preventDefault()" [formGroup]="formExtender"
+                (ngSubmit)="onSubmitFormExtender($event)">
+                <select name="" id="" formControlName="tiempo_extension">
+                    <option value="">Seleccionar tiempo</option>
+                    <option value="5">5 min</option>
+                    <option value="15">15 min</option>
+                    <option value="30">30 min</option>
+                </select>
+                <div class="mt-3 text-center" *ngIf="formExtender.value.tiempo_extension != ''">
+                    <button class="kaze-btn kaze-btn-success">
+                        Extender
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</app-modal>
+
+
+<app-modal [showModal]="mostrarModalPosponer" (modalChange)="modalPosponerChange($event)" title="Posponer revisión">
+
+    <div class="p-3">
+        <p>
+            Seleccione el tiempo de postergación
+        </p>
+        <div class="kaze-form-control active">
+            <form (keydown.enter)="$event.preventDefault()" [formGroup]="formPosponer"
+                (ngSubmit)="onSubmitFormPosponer($event)">
+                <select name="" id="" formControlName="tiempo">
+                    <option value="">Seleccionar tiempo</option>
+                    <option value="1">1h</option>
+                    <option value="2">2hs</option>
+                    <option value="4">4hs</option>
+                    <option value="6">6hs</option>
+                    <option value="8">8hs</option>
+                </select>
+                <div class="mt-3 text-center" *ngIf="formPosponer.value.tiempo != ''">
+                    <button class="kaze-btn kaze-btn-success">
+                        Extender
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</app-modal>
+
+<app-modal [showModal]="mostrarModalCerrarTicket" (modalChange)="modalCerrarTicketChange($event)"
+    title="Finalizar revisión">
+
+    <div class="p-3">
+        <p>
+            Indique los datos necesarios para finalizar la revisión
+        </p>
+        <hr>
+        <div class="pt-3"></div>
+        <form (keydown.enter)="$event.preventDefault()" [formGroup]="formCierreAlerta"
+            (ngSubmit)="onSubmitFormCerrarTicket($event)">
+
+            <div class="row p-3" style="background-color: #f1f1f1;">
+                <div class="col-lg-6 py-3">
+                    <div class="kaze-form-control active">
+
+                        <select name="" id="" formControlName="idclasificacion">
+                            <option value="">Seleccionar nueva clasificación</option>
+                            <ng-container *ngFor="let item of optionsClasificaciones">
+                                <option [value]="item.id">
+                                    {{ item.nombre }}
+                                </option>
+                            </ng-container>
+                        </select>
+                        <label for="">
+                            Clasificación
+                        </label>
+                    </div>
+                    <div class="mt-4">
+                        <!-- <app-kaze-form-input label="Detalle" formControlName="detalle" /> -->
+                        <div class="kaze-form-control active">
+                            <textarea name="" id="" cols="30" rows="5" formControlName="detalle"></textarea>
+                            <label for="">
+                                Comentarios
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 py-3">
+                    <app-kaze-form-input label="Link" formControlName="link" />
+                    <br>
+                    <div class="kaze-form-control active">
+                        <input type="file" formControlName="archivo" (change)="onFileChanged($event, 'archivo',0)">
+                        <label for="">Archivo</label>
+                    </div>
+                    <br>
+                    <app-kaze-form-input label="Comentario archivo" formControlName="comentario_archivo" />
+
+                </div>
+                <hr>
+            <p>
+                Enlaces útiles
+            </p>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-lg-4">
+                    <app-kaze-form-input label="Link manual diagnostico" formControlName="link_manual_diagnostico"/>
+                </div>
+                <div class="col-lg-4">
+                    <app-kaze-form-input label="Link manual reparacion" formControlName="link_manual_reparacion"/>
+                </div>
+                <div class="col-lg-4">
+                    <app-kaze-form-input label="Link manual operador" formControlName="link_manual_operador"/>
+                </div>
+            </div>
+            <input type="hidden" formControlName="idmaquina">
+            </div>
+
+            
+
+            <input type="hidden" name="idalerta" formControlName="idalerta">
+
+            <div *ngIf="mensajeErrorFinalizar != ''" class="mt-3 text-white alert alert-danger">
+                {{ mensajeErrorFinalizar }}
+            </div>
+
+            <div class="mt-3 text-center">
+                <div class="px-2 d-inline">
+                    <button class="kaze-btn kaze-btn-warning" type="button"
+                        (click)="continuarAtencion = 0; onSubmitFormCerrarTicket($event)">
+                        Finalizar revisión y salir
+                    </button>
+                </div>
+                <div class="px-2 d-inline">
+                    <button class="kaze-btn kaze-btn-success" type="button"
+                        (click)="continuarAtencion = 1; onSubmitFormCerrarTicket($event)">
+                        Finalizar revisión y continuar
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+</app-modal>
+
+
+<app-modal [showModal]="mostrarModalDerivarAlerta" (modalChange)="modalDerivarAlertaChange($event)"
+    title="Finalizar revisión">
+
+    <div class="p-3">
+        <p>
+            Seleccione el usuario a quien derivará el caso
+        </p>
+        <hr>
+        <div class="pt-3"></div>
+        <form (keydown.enter)="$event.preventDefault()" [formGroup]="formDerivarAlerta"
+            (ngSubmit)="onSubmitFormDerivarAlerta($event)">
+            <div class="kaze-form-control active">
+
+                <select name="" id="" formControlName="idusuario_csc_destino">
+                    <option value="">Seleccionar usuario</option>
+                    <ng-container *ngFor="let item of optionsUsuariosAtendiendo">
+                        <option *ngIf="item.id != appSession.userId" [value]="item.id">
+                            {{ item.nombre }}
+                        </option>
+                    </ng-container>
+                </select>
+                <label for="">
+                    Nuevo usuario CSC
+                </label>
+            </div>
+
+            <input type="hidden" name="idalerta" formControlName="idalerta">
+
+            <div class="mt-3 text-center">
+                <button class="kaze-btn kaze-btn-success" (click)="onSubmitFormDerivarAlerta($event)">
+                    Derivar revisión
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</app-modal>
+
+<app-modal [showModal]="mostrarModalAtenderOtro" (modalChange)="modalAtenderOtroChange($event)"
+    title="Pausar revisión actual y comenzar nueva">
+
+    <div class="p-3">
+        <p>
+            ¿Desea pausar la revisión actual y comenzar la revisión de este nuevo caso?
+        </p>
+        <hr>
+        <div class="pt-3"></div>
+
+        <div class="mt-3 text-center">
+            <button class="kaze-btn kaze-btn-success" (click)="comenzarNuevaRevision($event)">
+                Comenzar nueva revisión
+            </button>
+        </div>
+    </div>
+
+</app-modal>
+
+<app-modal [showModal]="mostrarModalDerivarServicios" (modalChange)="modalDerivarServiciosChange($event)"
+    title="Derivar caso a Servicios">
+    <div class="p-3" style="background-color: #f1f1f1;">
+        <form (keydown.enter)="$event.preventDefault()" [formGroup]="formDerivarAlertaServicios"
+            (ngSubmit)="onSubmitFormDerivarAlertaServicios($event)">
+            <div class="row">
+                <div class="col-lg-5">
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <app-kaze-form-input label="Número interno CORSVAP" formControlName="numero_corsvap" />
+                        </div>
+                        <div class="col-lg-6">
+                            <button class="kaze-btn kaze-btn-warning" (click)="obtenerDatosCorsvap()">
+                                Obtener datos
+                            </button>
+                        </div>
+                    </div>
+                    
+                   
+                    
+                    <br>
+                    <ng-container *ngIf="datosCorsvap != undefined">
+                        <p>Responsable de servicios:</p>
+                        <h3>
+                            {{ (datosCorsvap.responsable!= null ? datosCorsvap.responsable.nombre :
+                            '')+"."+datosCorsvap.sucursal.trim() }}
+                        </h3>
+                        <small>Se notificará a: {{ datosCorsvap.responsable!= null ? datosCorsvap.responsable.email : ''
+                            }} </small>
+                    </ng-container>
+                    <ng-container *ngIf="coincidePIN == 1">
+
+                        <div class="alert alert-success">
+                            Datos de CORSVAP
+                        </div>
+
+                    </ng-container>
+                </div>
+                <div class="col-lg-7">
+                    <p>
+                        Datos de CORSVAP
+                    </p>
+                    <ng-container *ngIf="datosCorsvap != undefined">
+                        <h3>
+                            {{ datosCorsvap.numbocacomp + "-"+ datosCorsvap.numcomp }}
+                        </h3>
+                        <ul>
+                            <li><b>CUIT: </b> {{ datosCorsvap.cuit_cli }}</li>
+                            <li><b>Razon social: </b> {{ "("+datosCorsvap.idcliente+") "+ datosCorsvap.nombre_cli }}
+                            </li>
+                            <li><b>Marca modelo: </b> {{
+                                datosCorsvap.datos_maquinaria.marca+"."+datosCorsvap.datos_maquinaria.modelo }}</li>
+                            <li><b>PIN: </b> {{ datosCorsvap.datos_maquinaria.seriechasis }}</li>
+                        </ul>
+
+                    </ng-container>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+            
+                    <div class="pt-4">
+                        <app-kaze-form-input label="Fecha esperada inicio" formControlName="fechavencimiento" [focusedParam]="true"
+                            type="date" />
+                    </div>
+            
+                </div>
+                <div class="col-lg-6">
+            
+                    <div class="pt-4">
+                        <app-kaze-form-input label="Fecha esperada finalización" formControlName="fechaestimadafinalizacion"
+                            [focusedParam]="true" type="date" />
+                    </div>
+                </div>
+            </div>
+
+            <p *ngIf="item_actual!= undefined && datosCorsvap != undefined"
+                [ngClass]="coincidePIN == 1 ? 'text-success' : 'text-danger'">
+                {{ item_actual.pin == datosCorsvap.datos_maquinaria.seriechasis.trim() ? 'Datos de CORSVAP correctos' :
+                'Los datos de la CORSVAP no coinciden con los del caso. Corregir la orden e intentar nuevamente.' }}
+            </p>
+
+            <!-- <div class="mt-3 text-center" *ngIf="coincidePIN == 1"> -->
+            <br>
+
+            <!-- <app-kaze-form-input label="Mensaje para coordinador" formControlName="mensajeoperador"/> -->
+
+            <div class="kaze-form-control active">
+
+                <textarea formControlName="mensajeoperador" cols="30" rows="3">
+
+                </textarea>
+                <label for="">
+                    Mensaje para coordinador
+                </label>
+            </div>
+            <br>
+            <app-kaze-form-input label="Datos de contacto" formControlName="datoscontacto" />
+
+        </form>
+
+        <div class="mt-3 text-center">
+            <button class="kaze-btn kaze-btn-success" (click)="confirmarDerivacionServicios($event)">
+                Confirmar operación
+            </button>
+        </div>
+    </div>
+
+</app-modal>
+
+<app-modal [showModal]="mostrarModalCrearCaso" (modalChange)="modalCrearCasoChange($event)" title="Crear caso manual">
+    <div class="p-3" style="background-color: #f1f1f1;">
+        <form (keydown.enter)="$event.preventDefault()" [formGroup]="form_crear_caso">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <app-kaze-form-input label="Código de falla" detail="Opcional" formControlName="codigo_format" />
+                </div>
+
+                <div class="col-lg-8 mb-4">
+                    <app-kaze-form-input label="Detalle" formControlName="descripcionCompleta" />
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="kaze-form-control active">
+                        <select name="" id="" formControlName="idcategoria_alerta">
+                            <option value="">Seleccionar categoría</option>
+                            <ng-container *ngFor="let item of options_categorias">
+                                <option [value]="item.id"> {{ item.color+". "+item.tipo+". "+item.detalle.split(' ')[0]
+                                    }} </option>
+                            </ng-container>
+                        </select>
+                        <label for="">
+                            Categoría de alerta
+                        </label>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+
+                    <div class="ng-autocomplete" style="width: 100%; border-radius: 20px;">
+                        <ng-autocomplete [data]="dataOrg" [searchKeyword]="keywordOrganizaciones"
+                            placeholder="Indicar organización" (selected)='selectOrganizacionEvent($event)'
+                            (inputChanged)='onOrganizacionChangeSearch($event)'
+                            (inputFocused)='onOrganizacionFocused($event)' [itemTemplate]="itemTemplate"
+                            [notFoundTemplate]="notFoundTemplate">
+                        </ng-autocomplete>
+
+                        <ng-template #itemTemplate let-item>
+                            <a [innerHTML]="item.name"></a>
+                        </ng-template>
+
+                        <ng-template #notFoundTemplate let-notFound>
+                            <div [innerHTML]="'Sin resultados'"></div>
+                        </ng-template>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+
+                    <div class="ng-autocomplete" style="width: 100%; border-radius: 20px;">
+                        <ng-autocomplete [data]="dataMaq" [searchKeyword]="keyword" placeholder="Indicar maquinaria"
+                            (selected)='selectMaquinariaEvent($event)' (inputChanged)='onMaquinariaChangeSearch($event)'
+                            (inputFocused)='onMaquinariaFocused($event)' [itemTemplate]="itemTemplate"
+                            [notFoundTemplate]="notFoundTemplate">
+                        </ng-autocomplete>
+
+                        <ng-template #itemTemplate let-item>
+                            <a [innerHTML]="item.name"></a>
+                        </ng-template>
+
+                        <ng-template #notFoundTemplate let-notFound>
+                            <div [innerHTML]="'Sin resultados'"></div>
+                        </ng-template>
+                    </div>
+
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <app-kaze-form-input label="Tiempo estimado resolución" type="number"
+                        formControlName="tiempoestimadoresolucion" detail="minutos" />
+
+                </div>
+            </div>
+        </form>
+        <div *ngIf="mostrar_mensaje_error" class="alert alert-danger text-white">
+            {{ mensaje_error }}
+        </div>
+        <button class="kaze-btn kaze-btn-success" (click)="crearCasoManual()">
+            Crear caso manual
+        </button>
+    </div>
+
+</app-modal>
+
+<app-modal [showModal]="mostrarModalAgregarAccion" (modalChange)="modalAtenderAgregarAccion($event)"
+    title="Agregar acción del caso">
+
+    <div class="p-3">
+
+        <div [class]=" item_actual != undefined ? 'row' : ''">
+            <div [class]="'p-3 '+(item_actual == undefined ? '' : 'col-lg-6')" style="background-color: #f1f1f1;" *ngIf="item_actual != undefined">
+                <p>
+                    Se listarán las acciones disponibles para este código de falla y este modelo de maquinaria.
+                </p>
+                <div *ngIf="item_actual != undefined">
+                    <br>
+                    <h5>
+                        Código: <b>{{ item_actual.additionalDetails }}</b>
+                    </h5>
+                    <h5>
+                        Modelo: <b>{{ item_actual.data_maquina.marca+" "+item_actual.data_maquina.modelo }}</b>
+                    </h5>
+                    <br>
+                </div>
+                <form (keydown.enter)="$event.preventDefault()" [formGroup]="formAgregarAccion">
+                    <div class="row">
+    
+                        <div class="col-lg-12 mb-4">
+                            <div *ngIf="!crearAccionNueva" class="ng-autocomplete" style="width: 100%; border-radius: 20px;">
+                                <ng-autocomplete [data]="dataAcciones" searchKeyword='descripcion'
+                                    placeholder="Buscar acción existente" (selected)='selectAccionEvent($event)'
+                                    (inputChanged)='onAccionChangeSearch($event)' [itemTemplate]="itemTemplate1"
+                                    (inputFocused)='onAccionesFocused($event)' [notFoundTemplate]="notFoundTemplate1">
+                                </ng-autocomplete>
+    
+                                <ng-template #itemTemplate1 let-item>
+                                    <a [innerHTML]="item.descripcion"></a>
+                                </ng-template>
+    
+                                <ng-template #notFoundTemplate1 let-notFound>
+                                    <div [innerHTML]="'Sin resultados'"></div>
+                                </ng-template>
+                            </div>
+                            <div class="" *ngIf="crearAccionNueva">
+                                <app-kaze-form-input label="Nombre acción nueva" type="text"
+                                    formControlName="nombre_accion_nueva" />
+                            </div>
+                            <div class="mt-4">
+                                <app-kaze-form-input label="Comentarios de acción" detail="Opcional"
+                                    formControlName="comentario" />
+                            </div>
+                        </div>
+    
+                        
+                    </div>
+                </form>
+                <div class="px-2 d-inline">
+                    <button class="kaze-btn kaze-btn-success" (click)="agregarAccion()">
+                        Agregar
+                    </button>
+                </div>
+                <div class="px-2 d-inline">
+                    <button class="kaze-btn kaze-btn-primary"  *ngIf="!crearAccionNueva" (click)="crearAccionNueva = true">
+                        Crear acción nueva
+                    </button>
+                    <button class="kaze-btn kaze-btn-warning"  *ngIf="crearAccionNueva" (click)="crearAccionNueva = false">
+                        Buscar acción
+                    </button>
+                </div>
+
+                <div *ngIf="lista_acciones_estadisticas.length > 0">
+                    <br>
+                    <legend>
+                        Carga de acciones
+                    </legend>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-6 mb-4">
+                            <app-kaze-form-input label="Porcentaje de aplicación" detail="Cargar detalles con filtro" type="number"/>
+                        </div>
+                        <div class="col-lg-6 mb-4">
+                            <button class="kaze-btn kaze-btn-primary" (click)="precargarAcciones()">
+                                Precargar datos
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+    
+            <div [class]="'p-3 '+(item_actual == undefined ? '' : 'col-lg-6')" style="background-color: #f1f1f1;">
+                <legend>
+                    Posible procedimiento de resolución
+                </legend>
+                <hr>
+                <ul class="list-group" *ngIf="!obteniendo_analisis_resoluciones">
+                    <li class="list-group-item" *ngFor="let item of lista_acciones_estadisticas; index as i" style="cursor: pointer;">
+                        <b> <h5> {{ i+1 }} </h5></b> <p style="text-overflow: ellipsis; text-wrap: balance;"> {{ item.descripcion }} </p> <b>{{item.porcentaje_str+"%"}}</b>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" [ngStyle]="{'width': item.porcentaje+'%'}" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </li>
+                </ul>
+                <legend *ngIf="obteniendo_analisis_resoluciones">
+                    Cargando datos...
+                </legend>
+                <p *ngIf="!obteniendo_analisis_resoluciones && lista_acciones_estadisticas.length == 0">
+                    No se ha encontrado análisis
+                </p>
+            </div>
+        </div>
+
+        <!-- <div class="mt-3 text-center">
+            <button class="kaze-btn kaze-btn-success" (click)="comenzarNuevaRevision($event)">
+                Comenzar nueva revisión
+            </button>
+        </div> -->
+
+    </div>
+
+</app-modal>
+
+<app-modal [showModal]="mostrarModalSilenciarAlerta" (modalChange)="modalExtenderChange($event)" title="Silenciar alerta">
+
+    <div class="p-3">
+        <p>
+            Indique motivo para silenciar alerta para esta máquina y fecha para volver a reactivar
+        </p>
+        <div class="kaze-form-control active">
+            <form (keydown.enter)="$event.preventDefault()" [formGroup]="formSilenciar"
+                (ngSubmit)="onSubmitFormSilenciar($event)">
+                
+                <br>
+                <app-kaze-form-input label="Motivo" formControlName="motivo" />
+                <br>
+                <app-kaze-form-input label="Fecha reactivación" type="date" [focusedParam]="true" formControlName="fecha_limite" />
+
+                <div class="mt-3 text-center" *ngIf="formSilenciar.value.fecha_limite != '' && formSilenciar.value.motivo != ''">
+                    <button class="kaze-btn kaze-btn-success">
+                        Silenciar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</app-modal>

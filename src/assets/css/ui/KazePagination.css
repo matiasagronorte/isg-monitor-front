@@ -1,0 +1,27 @@
+.kaze-pagination {
+
+    width: fit-content;
+    background-color: white; 
+    list-style-type: none; 
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: flex; 
+    flex-direction: row; 
+    justify-content: center;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Ajusta los valores según tus preferencias */
+
+}
+
+.kaze-pagination li {
+    padding: 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.kaze-pagination li:hover {
+    background-color: rgb(230, 230,230);
+}

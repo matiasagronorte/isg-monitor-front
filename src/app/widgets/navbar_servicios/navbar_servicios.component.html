@@ -1,0 +1,36 @@
+<nav class="kaze-navbar {{ isNavCollapsed ? 'kaze-collapsed' : '' }}">
+    <div style="text-align: center;" class="mt-3">
+        <h3>Agronorte</h3>
+    </div>
+    <ul class="kaze-navbar-list">
+        <li (click)="navigate('home')"><fa-icon [icon]="faHome"></fa-icon> Inicio</li>
+        <!-- <li (click)="navigate('monitor')"><fa-icon [icon]="faDesktop"></fa-icon> Monitor</li>
+        <li (click)="navigate('paquetes')"><fa-icon [icon]="faBagShopping"></fa-icon> Paquetes </li>
+        <li (click)="navigate('account')"><fa-icon [icon]="faUser"></fa-icon> Mi cuenta</li>
+        <li (click)="navigate('atencion')"><fa-icon [icon]="faPhone"></fa-icon> Atención </li>
+        <li (click)="navigate('alertas')"><fa-icon [icon]="faBell"></fa-icon> Gestión de alertas </li>
+        <hr>
+        <li (click)="navigate('servicios')"><fa-icon [icon]="faWrench"></fa-icon> Servicios </li>-->
+        <li (click)="navigate('account')"><fa-icon [icon]="faWrench"></fa-icon> Ajustes</li> 
+        <li class="kaze-navbar-button-container">
+            <button class="kaze-btn kaze-btn-danger w-100" (click)="abrirModalCerrarSesion()">
+                Cerrar sesión
+            </button>
+        </li>
+    </ul>
+
+    <button class="kaze-toggle-button" (click)="handleNavCollapse()" >
+        <fa-icon [icon]="faBars"></fa-icon>
+    </button>
+</nav>
+
+<app-modal [showModal]="mostrarModalCerrarSesion" (modalChange)="modalChange($event)" title="Confirmar cierre de sesión">
+
+    <p>¿Realmente desea cerrar sesión?</p>
+    <div style="text-align: center;" class="mt-3">
+        <button class="kaze-btn kaze-btn-success" (click)="cerrarSesion()">
+            Si. Cerrar sesión
+        </button>
+    </div>
+
+</app-modal>

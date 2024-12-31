@@ -1,0 +1,307 @@
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" async></script>
+
+<div class="">
+
+    <app-navbar [isNavCollapsed]="collapsedNav" (collapseChange)="updateCollapse($event)" />
+    <div [ngClass]="'container-fluid p-5 app-content'+ (collapsedNav ? ' w-100 mx-0' : '')">
+        <h1><b>Inicio</b></h1>
+        <hr>
+        <legend><b>Resumen de alertas</b></legend>
+        <br>
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="card bg-danger p-3 text-white mb-3" (click)="setGraph(3)" style="cursor: pointer;">
+                    <div
+                        style="width: 100%; display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+                        <h3 style="text-align: left;">
+                            Urgentes
+                        </h3>
+                        <h1 style="text-align: right;">
+                            {{ totalUrgentes }}
+                        </h1>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <ul>
+                                <li><small>En proceso: {{ dataResumenMonitor.redCard.en_proceso }} </small></li>
+                                <li><small>Pendientes: {{ dataResumenMonitor.redCard.pendientes }}</small> </li>
+                                <li><small>Resueltos: {{ dataResumenMonitor.redCard.resueltos }} </small></li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-6">
+                            <ul>
+                                <li><small>No resueltos: {{ dataResumenMonitor.redCard.no_resueltos }}</small> </li>
+                                <li><small>Derivados: {{ dataResumenMonitor.redCard.derivados }} </small> </li>
+                                <li><small>Otros estados: {{ dataResumenMonitor.redCard.otros_estados }}</small> </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div style="cursor: pointer;" class="card bg-warning p-3 text-white mb-3" (click)="setGraph(2)">
+                    <div
+                        style="width: 100%; display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+                        <h3 style="text-align: left;">
+                            Importantes
+                        </h3>
+                        <h1 style="text-align: right;">
+                            {{ totalImportantes }}
+                        </h1>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <ul>
+                                <li><small>En proceso: {{ dataResumenMonitor.yellowCard.en_proceso }}</small> </li>
+                                <li><small>Pendientes: {{ dataResumenMonitor.yellowCard.pendientes }} </small></li>
+                                <li><small>Resueltos: {{ dataResumenMonitor.yellowCard.resueltos }}</small> </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-6">
+                            <ul>
+                                <li><small>No resueltos: {{ dataResumenMonitor.yellowCard.no_resueltos }}</small> </li>
+                                <li><small>Derivados: {{ dataResumenMonitor.yellowCard.derivados }} </small> </li>
+                                <li><small>Otros estados: {{ dataResumenMonitor.yellowCard.otros_estados }} </small>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div style="cursor: pointer;" class="card bg-primary p-3 text-white mb-3" (click)="setGraph(1)">
+                    <div
+                        style="width: 100%; display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+                        <h3 style="text-align: left;">
+                            Primarias
+                        </h3>
+                        <h1 style="text-align: right;">
+                            {{ totalPrimarias }}
+                        </h1>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <ul>
+                                <li><small>En proceso: {{ dataResumenMonitor.blueCard.en_proceso }}</small> </li>
+                                <li><small>Pendientes: {{ dataResumenMonitor.blueCard.pendientes }}</small> </li>
+                                <li><small>Resueltos: {{ dataResumenMonitor.blueCard.resueltos }}</small> </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-6">
+
+                            <ul>
+                                <li><small>No resueltos: {{ dataResumenMonitor.blueCard.no_resueltos }} </small></li>
+                                <li><small>Derivados: {{ dataResumenMonitor.blueCard.derivados }} </small> </li>
+                                <li><small>Otros estados: {{ dataResumenMonitor.blueCard.otros_estados }}</small> </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <form (keydown.enter)="$event.preventDefault()" [formGroup]="form_filtrar_fecha_home">
+                    <div class="row">
+
+                        <div class="col-lg-4 mb-4">
+                            <app-kaze-form-input label="Fecha desde" type="date" [focusedParam]="true"
+                                formControlName="fechadesde" />
+                        </div>
+                        <div class="col-lg-4 mb-4">
+                            <app-kaze-form-input label="Fecha hasta" type="date" [focusedParam]="true"
+                                formControlName="fechahasta" />
+                        </div>
+                        <div class="col-lg-4">
+                            <button class="kaze-btn kaze-btn-primary" (click)="obtenerDatosPrincipales()">
+                                <fa-icon [icon]="faFilter" /> Filtrar
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+
+                <hr>
+
+                <google-chart *ngIf="vistaGeneral" [type]="ChartType.PieChart" [data]="alertsData"
+                    [options]="PieCharOptions" [width]="700" [height]="500" style="width: 100%;"></google-chart>
+                <google-chart *ngIf="!vistaGeneral" [type]="ChartType.ColumnChart" [data]="filteredDataDisplay"
+                    [columns]="columnsFilteredChart" [options]="PieCharOptions" [width]="800" [height]="500"
+                    style="width: 100%;"></google-chart>
+
+            </div>
+        </div>
+        <div ngbAccordion *ngFor="let item of data_casos_accordion;index as i">
+            <div ngbAccordionItem>
+                <h2 ngbAccordionHeader>
+                    <button ngbAccordionButton
+                        [class]="(item.filtro_csc == 3 ? 'bg-danger' : item.filtro_csc == 2 ? 'bg-warning' : 'bg-primary')+' text-white'">
+                        {{ item.nombreclasificacion }} </button>
+                </h2>
+                <div ngbAccordionCollapse>
+                    <div ngbAccordionBody>
+                        <ng-template>
+
+
+                            <div class="table-responsive" [id]="'multiCollapseExample'+i">
+                                <!-- <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Operador</th>
+                                            <th>Fecha hora</th>
+                                            <th>Organización</th>
+                                            <th>Máquina</th>
+                                            <th>Código alerta</th>
+                                            <th>Fecha hora inicio rev.</th>
+                                            <th>Fecha hora fin rev.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item_caso of item.lista_casos">
+                                            <td>
+                                                {{ item_caso.nombrevendedor }}
+                                            </td>
+                                            <td>
+                                                {{ item_caso.fechahora }}
+                                            </td>
+                                            <td>
+                                                {{ item_caso.organization }}
+                                            </td>
+                                            <td>
+                                                {{ item_caso.nombremaquina }}
+                                            </td>
+                                            <td>
+                                                {{ item_caso.codigo_format }}
+                                            </td>
+                                            <td>
+                                                {{ item_caso.fechahorarevision }}
+                                            </td>
+                                            <td>
+                                                {{ item_caso.fechahorafinalizacion }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table> -->
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha hora</th>
+                                            <th>Código de falla</th>
+                                            <th>Descripción</th>
+                                            <th>Severidad</th>
+                                            <th>Fecha hora revisión</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of item.lista_casos; index as j" style="cursor: pointer;"
+                                            (click)="abrirAlertaFiltrada(j,i)">
+                                            <td> {{ formatearFechaHora(item.fechahora) }} </td>
+                                            <td> {{ item.codigo_format }} </td>
+                                            <td> {{ item.descripcionCompleta.length > 50 ?
+                                                item.descripcionCompleta.substring(0,50)+"..." :
+                                                item.descripcionCompleta }} </td>
+                                            <td> {{ item.nombre_severidad }} </td>
+                                            <td> {{ item.fechahorarevision }} </td>
+                                            <td> {{ item.nombre_estado }} </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+    </div>
+</div>
+
+
+<app-modal [showModal]="mostrarModalDetalleAlerta" (modalChange)="modalDetalleAlertaChange($event)"
+    title="Detalle de alerta">
+
+    <ng-container *ngIf="dataAlertaSeleccionada != undefined">
+        <h3>
+            {{ dataAlertaSeleccionada["codigo_format"] }}
+        </h3>
+        <small>{{ formatearFechaHora(dataAlertaSeleccionada["fechahora"]) }}</small>
+        <br>
+        <div class="row">
+            <div class="col-lg-7">
+                <p> {{ dataAlertaSeleccionada["descripcionCompleta"] }} </p>
+
+                <hr>
+                <b>Organización:</b>
+                <p>{{ dataAlertaSeleccionada["organization"] }} </p>
+                <b>Marca:</b>
+                <p>{{ dataAlertaSeleccionada.data_maquina.marca }} </p>
+                <!-- <br> -->
+                <b>Tipo: </b>
+                <p>{{ dataAlertaSeleccionada.data_maquina.nombre_tipo_maquina }} </p>
+                <!-- <br> -->
+                <b>Modelo:</b>
+                <p>{{ dataAlertaSeleccionada.data_maquina.modelo }} </p>
+                <!-- <br> -->
+                <b>PIN: </b>
+                <p>{{ dataAlertaSeleccionada["pin"] }} </p>
+                <!-- <br> -->
+                <b>Repeticiones: </b>
+                <p>{{ dataAlertaSeleccionada["occurrenceCount"] == "" ? 'N/D' : dataAlertaSeleccionada["occurrenceCount"]+" ocurrencias" }} </p>
+                <!-- <br> -->
+                <b>Duración: </b>
+                <p>{{ dataAlertaSeleccionada["durationSeconds"] == "" ? 'N/D' : dataAlertaSeleccionada["durationSeconds"]+"seg" }}</p>
+                <!-- <br> -->
+                <b>Horas del motor: </b>
+                <p>{{ dataAlertaSeleccionada["engineHours"] == "" ? 'N/D' : dataAlertaSeleccionada["engineHours"]+"hs"}} </p>
+
+                <div *ngIf="">
+
+                </div>
+
+            </div>
+            <div class="col-lg-5">
+                <div class="alert alert-secondary">
+                    <b>
+                        Categoría
+                    </b>
+                    <p>
+                        Códigos de diagnóstico
+                    </p>
+
+                    <br>
+                    <div class="py-4">
+
+                        <div class="row justify-content-between">
+                            <div class="col-3 pt-2">
+                                <p style="border-radius: 10px;"
+                                    [ngClass]="'text-white d-inline p-2 bg-'+(dataAlertaSeleccionada['filtrarcsc'] == 3 ? 'danger' : dataAlertaSeleccionada['filtrarcsc'] == 2 ? 'warning' : 'info')">
+                                    <b>{{ dataAlertaSeleccionada['filtrarcsc'] == 3 ? 'ALTA' :
+                                        dataAlertaSeleccionada['filtrarcsc'] == 2 ? 'MEDIA' : 'INFO' }}</b>
+                                </p>
+                            </div>
+                            <div *ngIf="dataAlertaSeleccionada['link_instructivo'] != '' && dataAlertaSeleccionada['link_instructivo'] != undefined"
+                                class="col-8 pb-2">
+                                <p class="kaze-btn-primary p-2 text-white" style="cursor: pointer; border-radius: 20px;"
+                                    href="#" (click)="descargarInstructivo()">
+                                    Descargar instructivo
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="map-container">
+                        <div class="map-frame">
+                            <div id="map"></div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+
+        <br>
+    </ng-container>
+
+</app-modal>

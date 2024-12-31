@@ -1,0 +1,63 @@
+.kaze-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+.kaze-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: left 0.3s ease;
+}
+
+.kaze-btn:hover::before {
+    left: 100%;
+}
+
+.kaze-btn-inner-text {
+    display: flex;
+    align-items: center !important;
+}
+
+.kaze-btn.hovered {
+    transform: scale(1.05); /* Ajusta el valor según tus preferencias de zoom */
+}
+
+.kaze-btn:active {
+    transform: scale(0.9); /* Ajusta el valor según tus preferencias de zoom out al hacer clic */
+}
+
+.kaze-btn-primary {
+    background-color: #486fcc;
+}
+
+.kaze-btn-secondary {
+    background-color: #929292;
+}
+
+.kaze-btn-success {
+    background-color: #479a47;
+}
+
+.kaze-btn-warning {
+    background-color: #d2a92f;
+}
+
+.kaze-btn-danger {
+    background-color: #f84e52;
+}
+
+.kaze-btn-info {
+    background-color: #559d9b;
+}

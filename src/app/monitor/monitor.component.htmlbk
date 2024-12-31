@@ -1,0 +1,441 @@
+<div *ngIf="auth">
+
+    <app-navbar [isNavCollapsed]="collapsedNav" (collapseChange)="updateCollapse($event)"/>
+    <div [ngClass]="'container-fluid p-5 app-content'+ (collapsedNav ? ' w-100 mx-0' : '')" >
+
+        <h1><b>Monitor</b></h1>
+        <audio style="display: none;" #audioPlayer src="assets/tingmp3.mp3" controls="controls"></audio>
+        <hr>
+        <div class="row" *ngIf="!cargandoNotificacionesOrganizacion && !showingNotificacionesOrganizacion">
+            <div class="col-lg-9">
+                <h3>
+                    <b>
+                        Operador: {{ appSession.userId+". "+appSession.nombre }}
+                    </b>
+                </h3>
+                <br>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <form (keydown.enter)="$event.preventDefault()" [formGroup]="formFiltroAlertas">
+                            <!-- <app-kaze-form-select label="Horas de búsqueda" formControlName="hours" [options]="optionsHours"/> -->
+                            <div class="kaze-form-control active">
+                                <select name="" id=""  formControlName="hours" (change)="onSubmitFormFiltroAlertas($event)">
+                                    <option value="">Seleccionar horas</option>
+                                    <ng-container *ngFor="let item of optionsHours">
+                                        <option [value]="item.value">
+                                            {{ item.text }}
+                                        </option>
+                                    </ng-container>
+                                </select>
+                                <label for="">
+                                    Horas de búsqueda
+                                </label>
+                            </div>
+
+                            <div class="kaze-form-control active mt-4">
+                                <select name="" id=""  formControlName="lineanegocio" (change)="onSubmitFormFiltroAlertas($event)">
+                                    <option value="">Seleccionar unidad negocio</option>
+                                    <ng-container *ngFor="let item of optionsUnidadesNegocio">
+                                        <option [value]="item.value">
+                                            {{ item.text }}
+                                        </option>
+                                    </ng-container>
+                                </select>
+                                <label for="">
+                                    Linea negocio
+                                </label>
+                            </div>
+
+                            <p style="cursor: pointer; text-decoration: underline;" class="text-primary d-none" (click)="onSubmitFormFiltroAlertas($event)">
+                                Filtrar
+                            </p>
+                        </form>
+                    </div>
+                    <div class="col-lg-4">
+                        <button [ngClass]="'kaze-btn ' +( filtroPaquetes ? 'kaze-btn-warning' : 'kaze-btn-primary')" (click)="filtroPaquetes = !filtroPaquetes; filtroPaquetesOperador = !filtroPaquetes ? false : filtroPaquetesOperador ; obtenerDatos(); cargandoPaquetesVendidos = true">
+                            {{ filtroPaquetes ? 'Ver todas las alertas' : 'Ver sólo paquetes vendidos' }}
+                            </button>
+                            <br>
+                            <small class="text-secondary">
+                                Viendo ahora: <b>
+                                    {{ filtroPaquetes ? 'Filtro por Paquetes' : 'Todas las alertas' }}
+                                </b>
+                            </small>
+                            </div>
+                            <div class="col-lg-4" *ngIf="filtroPaquetes">
+                                <button [ngClass]="'kaze-btn ' +( filtroPaquetesOperador ? 'kaze-btn-warning' : 'kaze-btn-primary')"
+                                    (click)="filtroPaquetesOperador = !filtroPaquetesOperador; obtenerDatos(); cargandoPaquetesVendidos = true">
+                                    {{ filtroPaquetesOperador ? 'Ver todos los paquetes' : 'Ver mis paquetes' }}
+                                </button>
+                                <br>
+                                <small class="text-secondary">
+                                    Viendo ahora: <b>
+                                        {{ filtroPaquetesOperador ? 'Mis paquetes vendidos' : filtroPaquetes ? 'Todos los paquetes vendidos' :
+                                        'Todas las alertas' }}
+                                    </b>
+                                </small>
+                            </div>
+                            </div>
+                            
+                            
+                            <ng-container *ngIf="!cargandoPaquetesVendidos">
+                               
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        
+                                        <button class="kaze-btn kaze-btn-primary"
+                                            (click)="oportunidades_venta = oportunidades_venta == 1 ? 0 : 1;cargandoPaquetesVendidos = true;obtenerDatos()">
+                                            {{ oportunidades_venta == 1 ? 'Quitar filtro ventas' : 'Oportunidades de venta' }}
+                                        </button>
+                                        <br>
+                                        <small class="text-secondary">
+                                            Viendo ahora: <b>{{ oportunidades_venta == 1 ? "Oportunidades de venta" : "Alertas normalmente" }}</b>
+                                        </small>
+                                    </div>
+                            
+                                    <div class="col-lg-6">
+                                        <small>Buscar alertas de organización</small>
+                                        <div class="ng-autocomplete" style="width: 100%;">
+                            
+                                            <ng-autocomplete [data]="dataOrganizaciones" [searchKeyword]="keywordOrganizaciones"
+                                                placeholder="Ingresar nombre organización" (selected)='selectOrganizacionEvent($event)'
+                                                (inputChanged)='onOrganizacionChangeSearch($event)' (inputFocused)='onOrganizacionFocused()'
+                                                [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate">
+                                            </ng-autocomplete>
+                            
+                                            <ng-template #itemTemplate let-item>
+                                                <a [innerHTML]="' ('+item.id+' '+item.lineanegocio+') '+item.nombre+''"></a>
+                                            </ng-template>
+                            
+                                            <ng-template #notFoundTemplate let-notFound>
+                                                <div [innerHTML]="'Sin resultados'"></div>
+                                            </ng-template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <br>
+                            <small>
+                                Total de alertas obtenidas: {{ data.length }}
+                            </small>
+                            <hr>
+
+                <legend>
+                    <b>Alertas primarias</b>
+                </legend>
+                <div style="text-align: center;" class="w-100" >
+                    <div *ngIf="cargandoPaquetesVendidos">
+                        <p>Aplicando filtro...</p>
+                        <br>
+                        <div class="spinner-border">
+
+                    </div>
+                </div>
+
+                </div>
+                <div class="row" *ngIf="!cargandoPaquetesVendidos">
+                    <ng-container *ngFor="let item of data; index as i">
+                        <div class="col-lg-6" *ngIf="item.filtrarcsc > 0">
+                            <div *ngIf="indexCargandoAlertaPrimaria == i" class="w-100" style="text-align: center;">
+                                <h5>
+                                    Cargando datos de alerta:
+                                    <br>
+                                </h5>
+                                <h3>
+                                    {{item["codigo_format"]}}
+                                </h3>
+                                <div class="spinner-grow" style="width: 4rem; height: 4rem;" [ngClass]="(item['color'].toLowerCase() == 'rojo' || item['color'].toLowerCase() == 'red' ? 'text-danger' : item['color'].toLowerCase() == 'amarillo' || item['color'].toLowerCase() == 'yellow' ? 'text-warning' : 'text-primary')">
+                                </div>
+                            </div>
+                            <div *ngIf="indexCargandoAlertaPrimaria != i" [class]="'text-white w-100 mb-3 alert ' + (item['color'].toLowerCase() == 'rojo' || item['color'].toLowerCase() == 'red' ? 'alert-danger' : item['color'].toLowerCase() == 'amarillo' || item['color'].toLowerCase() == 'yellow' ? 'alert-warning' : 'alert-info')">
+                                <div >
+                                    <h5 class="d-inline">
+                                        <b>{{ item["codigo_format"] }}</b>
+                                    </h5>
+                                    <div class="px-2 d-inline">
+                                        <button class="kaze-btn kaze-btn-warning" (click)="obtenerAlerta(item); indexCargandoAlertaPrimaria = i">
+                                            <fa-icon [icon]="faEdit"/>
+                                        </button>
+                
+                                    </div>
+                                    <div class="ml-auto px-2 d-none">
+                                        <button class="kaze-btn kaze-btn-danger" (click)="mostrarModalDescartarAlerta = true; id_alertaseleccionada = item.id; organizacionAlertaCierre = item.organization; codigoErrorAlertaCierre = formatCodigoError(item.descripcionCompleta); fechahoraAlertaCierre = item.date">
+                                            <small><fa-icon [icon]="faClose" /></small>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <b>{{item["color"]}} </b>
+
+                                <br>
+                                <small>{{item.date}} </small>
+                                <hr>
+                                <legend>{{item.organization.replace("&amp;","&")}}</legend>
+                                <p>{{ obtenerTextoDesdeTercerEspacio(item.descripcionCompleta).substring(0,70)+"..." }} </p>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-lg-6 mb-3">
+                                        <button class="kaze-btn kaze-btn-secondary" (click)="obtenerNotificacionesOrganizacion(item.organization)">
+                                            <small><fa-icon [icon]="faBell"/> Alertas Org.</small>
+                                        </button>
+                                    </div>
+                                    <div class="col-lg-6 mb-3 d-none">
+                                        <button class="kaze-btn kaze-btn-secondary">
+                                            <small><fa-icon [icon]="faTractor"/> Datos Máquina</small>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <ng-container *ngIf="filtroPaquetes">
+                                    Vendedor: <b>{{ item.nombrevendedor }}</b>
+                                </ng-container>
+
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="col-lg-3" >
+                <legend>
+                    <b>Lista de alertas</b>
+                </legend>
+                <div class="row">
+                    <div class="col-4">
+                        <button [ngClass]="'kaze-btn w-100 ' + (redFilter ? 'kaze-btn-danger' : '') " (click)="toggleColorFilter('red')"><fa-icon [icon]="faCheck"/> </button>
+                    </div>
+                    <div class="col-4">
+                        <button [ngClass]="'kaze-btn w-100 ' + (yellowFilter ? 'kaze-btn-warning' : '') " (click)="toggleColorFilter('yellow')"><fa-icon [icon]="faCheck"/></button>
+                    </div>
+                    <div class="col-4">
+                        <button [ngClass]="'kaze-btn w-100 ' + (blueFilter ? 'kaze-btn-primary' : '') " (click)="toggleColorFilter('blue')"><fa-icon [icon]="faCheck"/></button>                        
+                    </div>
+                </div>
+                <div *ngIf="!cargandoPaquetesVendidos">
+                    <div *ngFor="let item of data; index as i">
+
+                        <div *ngIf="indexCargandoAlertaSecundaria == i" class="w-100" style="text-align: center;">
+                            <div class="row align-items-center">
+                                <div class="col-8">
+                                    <p>
+                                        Cargando datos de alerta:
+                                        <br>
+                                    </p>
+                                    <h3>
+                                        {{item["codigo_format"]}}
+                                    </h3>
+                                </div>
+                                <div class="col-4">
+                                    <div class="spinner-grow" style="width: 3rem; height: 3rem;" [ngClass]="(item['color'].toLowerCase() == 'rojo' || item['color'].toLowerCase() == 'red' ? 'text-danger' : item['color'].toLowerCase() == 'amarillo' || item['color'].toLowerCase() == 'yellow' ? 'text-warning' : 'text-primary')">
+                                    
+                                    </div>
+            
+                                </div>
+                            </div>
+                            
+                        </div>
+    
+                        <div *ngIf="indexCargandoAlertaSecundaria != i"  [class]="'text-white w-100 my-3 alert ' + (item['color'].toLowerCase() == 'rojo' || item['color'].toLowerCase() == 'red' ? 'alert-danger' : item['color'].toLowerCase() == 'amarillo' || item['color'].toLowerCase() == 'yellow' ? 'alert-warning' : 'alert-info')">
+                            <div style="flex-direction: row; display: flex;">
+                                <p><b>{{ item["codigo_format"] }}</b> |  {{item.date}}</p>
+                                
+                            </div>
+                            
+    
+                            <p>{{item.organization.replace("&amp;","&")}} </p>
+                            <hr>
+                            <div class="px-2 d-inline">
+                                <button class="kaze-btn kaze-btn-secondary" (click)="obtenerNotificacionesOrganizacion(item.organization)">
+                                    <small><fa-icon [icon]="faBell" /></small>
+                                </button>
+                            </div>
+                            <div class="px-2 d-inline d-none">
+                                <button class="kaze-btn kaze-btn-secondary">
+                                    <small><fa-icon [icon]="faTractor" /></small>
+                                </button>
+                            </div>
+                            <div class="px-2 d-inline">
+                                <button class="kaze-btn kaze-btn-warning" (click)="obtenerAlerta(item); indexCargandoAlertaSecundaria = i">
+                                    <fa-icon [icon]="faEdit"/>
+                                </button>
+                            </div>
+                            <div class="ml-auto px-2 d-none">
+                                <button class="kaze-btn kaze-btn-danger" (click)="mostrarModalDescartarAlerta = true;  id_alertaseleccionada = item.id; organizacionAlertaCierre = item.organization; codigoErrorAlertaCierre = item['codigo_format']; fechahoraAlertaCierre = item.date">
+                                    <small><fa-icon [icon]="faClose" /></small>
+                                </button>
+                            </div>
+                            <ng-container *ngIf="filtroPaquetes">
+                                <hr>
+                                Vendedor: <b>{{ item.nombrevendedor }}</b>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="cargandoPaquetesVendidos" class="text-center py-3">
+                    <p>
+                        Aplicando filtro...
+                    </p>
+                    <br>
+                    <div class="spinner-border">
+
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <div style="text-align: center;" *ngIf="cargandoNotificacionesOrganizacion">
+            <div class="spinner-border">
+
+            </div>
+            <h3>
+                Cargando últimas notificaciones...
+            </h3>
+            <hr>
+            <h1>
+                {{ nombreOrganizacionSeleccionada }}
+            </h1>
+        </div>
+
+        <div *ngIf="!cargandoNotificacionesOrganizacion && showingNotificacionesOrganizacion">
+            <h3>
+                Alertas de {{ nombreOrganizacionSeleccionada }}
+            </h3>
+            <div class="px-2 d-inline">
+                <button class="kaze-btn kaze-btn-danger" (click)="showingNotificacionesOrganizacion = false">
+                    <fa-icon [icon]="faClose"/>
+                    Cerrar
+                </button>    
+            </div>
+            <div class="px-2 d-inline">
+                <button [ngClass]="'kaze-btn ' + (filtrarOrganizacionCSC ? 'kaze-btn-info' : 'kaze-btn-warning')" (click)="filtrarOrganizacionCSC = !filtrarOrganizacionCSC">
+                    <fa-icon [icon]="faFilter"/>
+                    <div class="d-inline">
+                        {{ filtrarOrganizacionCSC ? 'Quitar filtro' : 'Filtrar CSC' }}
+                    </div>
+                </button>
+            </div>
+            <div class="px-2 d-inline">
+                <button class="kaze-btn kaze-btn-primary" (click)="obtenerNotificacionesOrganizacion(nombreOrganizacionSeleccionada)">
+                    <fa-icon [icon]="faRefresh"/>
+                </button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Código error</th>
+                            <th>Color</th>
+                            <th>Descripción</th>
+                            <th>Fecha hora</th>
+                            <th>Tipo Máquina</th>
+                            <th>PIN</th>
+                            <th>Marca y modelo</th>
+                            <th>Horas del motor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="cursor: pointer;" *ngFor="let item of lista_notificaciones_organizacion; index as i" (click)="configurarAlerta(item,nombreOrganizacionSeleccionada)">
+                            <ng-container *ngIf="!filtrarOrganizacionCSC || (filtrarOrganizacionCSC && item['filtrarcsc'] > 0)">
+                                <td style="color: white;" [ngClass]="item.colorId == '3' ? 'bg-danger' : item.colorId == '2' ? 'bg-warning' : 'bg-primary'"> <b> {{item["codigo_format"]}} </b></td>
+                                <td style="color: white;" [ngClass]="item.colorId == '3' ? 'bg-danger' : item.colorId == '2' ? 'bg-warning' : 'bg-primary'"> <b>{{item.colorId == "3" ? 'ROJO' : item.colorId == "2" ? 'AMARILLO' : 'AZUL'}}</b> </td>
+                                <td> {{item.eceLocalizedText.substring(0,70)+"..."}} </td>
+                                <td> {{ formatDate(item.alertCreatedTimestamp) }} </td>
+                                <td> {{item.machineType}} </td>
+                                <td> {{item.machinePin}} </td>            
+                                <td> {{item.machineMake+" "+item.machineModel}} </td>
+                                <td> {{item.engineHours}} </td>
+                            </ng-container>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+    <app-modal [showModal]="mostrarModalDetalleAlerta" (modalChange)="modalChange($event)" title="Detalle de alerta">
+
+        <h1>
+            {{ itemAlertaDetalle["codigoerror"] }}
+        </h1>
+        <small>{{ itemAlertaDetalle["fechahora"] }}</small>
+        <br>
+        <hr>
+        <p> {{ itemAlertaDetalle["titulo"] }} </p>
+        <br>
+        <hr>
+
+        <ul>
+            <li><b>Marca:</b>  {{ itemAlertaDetalle["marca"] }} </li>
+            <li><b>Tipo: </b> {{ itemAlertaDetalle["tipo"] }} </li>
+            <li><b>Modelo:</b>  {{ itemAlertaDetalle["modelo"] }} </li>
+            <li><b>PIN: </b> {{ itemAlertaDetalle["pin"] }} </li>
+            <li><b>Repeticiones: </b> {{ itemAlertaDetalle["repeticiones"] }} </li>
+            <li><b>Duración: </b> {{ itemAlertaDetalle["duracion"] }} </li>
+            <li><b>Horas del motor: </b> {{ itemAlertaDetalle["horasmotor"] }} </li>
+        </ul>
+        <br>
+        <h3>
+            <b>{{ itemAlertaDetalle["cliente"] }} </b>
+        </h3>
+        <br>
+        <div *ngIf="mensajeErrorAlerta != ''">
+            <p>
+                {{ mensajeErrorAlerta }}
+            </p>
+            <br>
+        </div>
+        <div class="px-2 d-inline">
+            <button [ngClass]="itemAlertaDetalle['filtrarcsc'] > 0 ? 'kaze-btn kaze-btn-danger' : 'kaze-btn kaze-btn-success'" (click)="marcarAlerta(itemAlertaDetalle['idalerta'],itemAlertaDetalle['filtrarcsc'],itemAlertaDetalle)">
+                <div *ngIf="itemAlertaDetalle['filtrarcsc'] == 0">
+                    Marcar alerta destacada
+                </div>
+                
+                <div *ngIf="itemAlertaDetalle['filtrarcsc'] > 0">
+                    Desmarcar alerta
+                </div>
+            </button>
+        </div>
+        <div class="px-2 d-none">
+            <button class="kaze-btn kaze-btn-danger" (click)="mostrarModalDetalleAlerta = false; mostrarModalDescartarAlerta = true;  id_alertaseleccionada = itemAlertaDetalle['id']; organizacionAlertaCierre = itemAlertaDetalle['cliente']; codigoErrorAlertaCierre = itemAlertaDetalle['codigo_format']; fechahoraAlertaCierre = itemAlertaDetalle['fechahora']">
+                <fa-icon [icon]="faClose"/>
+            </button>
+        </div>
+    </app-modal>
+
+    <app-modal [showModal]="mostrarModalDescartarAlerta" (modalChange)="modalDescartarAlertaChange($event)" title="Confirmar operación">
+        <div style="background-color: #f0f0f0; border-radius: 10px;" class="p-3">
+            <p>Para dar la alerta por finalizada, por favor, ingrese un detalle de cierre.</p>
+
+        <legend>{{ organizacionAlertaCierre }}
+        <br>
+       <b> {{ codigoErrorAlertaCierre }}</b>
+        
+        </legend>
+        <p>{{ fechahoraAlertaCierre }} </p>
+        <br>
+        <div style="text-align: center;">
+            <form (keydown.enter)="$event.preventDefault()" [formGroup]="formDescartarAlertas">
+                <app-kaze-form-input label="Detalle de cierre" type="text" formControlName="detalle"/>
+            </form>
+        </div>
+        <p style="text-decoration: underline;" class="text-primary" style="cursor: pointer;" (click)="formDescartarAlertas.get('detalle')?.setValue('Alerta revisada por '+appSession.nombre)">
+            Completar
+        </p>
+        <br>
+        <div style="text-align: center;">
+
+            <button class="kaze-btn kaze-btn-warning" (click)="descartarAlerta()">
+                Confirmar
+            </button>
+        </div>       
+        </div>
+    </app-modal>
+
+</div>
